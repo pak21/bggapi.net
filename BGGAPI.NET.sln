@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGGAPI.NET", "BGGAPI.NET\BGGAPI.NET.csproj", "{CFC71DA9-AC9B-4D05-B976-528387D6F078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{568332D8-218E-4556-9BCA-1BA79D4D4F89}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFC71DA9-AC9B-4D05-B976-528387D6F078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFC71DA9-AC9B-4D05-B976-528387D6F078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFC71DA9-AC9B-4D05-B976-528387D6F078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFC71DA9-AC9B-4D05-B976-528387D6F078}.Release|Any CPU.Build.0 = Release|Any CPU
+		{568332D8-218E-4556-9BCA-1BA79D4D4F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{568332D8-218E-4556-9BCA-1BA79D4D4F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{568332D8-218E-4556-9BCA-1BA79D4D4F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{568332D8-218E-4556-9BCA-1BA79D4D4F89}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
