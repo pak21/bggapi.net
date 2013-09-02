@@ -30,8 +30,10 @@ namespace BGGAPI
         // TODO: not implemented yet
         //public bool Historical { get; set; }
 
-        // TODO: not implemented yet
-        //public bool Marketplace { get; set; }
+        /// <summary>
+        /// If set to true, requests that marketplace data be returned
+        /// </summary>
+        public bool Marketplace { get; set; }
 
         // TODO: not implemented yet
         //public bool Comments { get; set; }

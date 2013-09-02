@@ -24,6 +24,7 @@ namespace BGGAPI.BGGThingsObjects
         public List<Link> Links { get; set; }
         public VideosList Videos { get; set; }
         public Statistics Statistics { get; set; }
+        public MarketplaceListings MarketplaceListings { get; set; }
     }
 
     public class Name
@@ -72,5 +73,41 @@ namespace BGGAPI.BGGThingsObjects
         public int Page { get; set; }
 
         public Ratings Ratings { get; set; }
+    }
+
+    public class MarketplaceListings
+    {
+        public List<Listing> Listings { get; set; }
+    }
+
+    public class Listing
+    {
+        public DateTimeValue ListDate { get; set; }
+        public MoneyValue Price { get; set; }
+        public StringValue Condition { get; set; }
+        public StringValue Notes { get; set; }
+        public LinkValue Link { get; set; }
+    }
+
+    public class DateTimeValue
+    {
+        public DateTime value { get; set; }
+    }
+
+    public class MoneyValue
+    {
+        public string Currency { get; set; }
+        public float value { get; set; }
+    }
+
+    public class StringValue
+    {
+        public string value { get; set; }
+    }
+
+    public class LinkValue
+    {
+        public string HRef { get; set; }
+        public string Title { get; set; }
     }
 }

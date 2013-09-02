@@ -14,7 +14,7 @@ namespace TestApp
             var collection = client.GetCollection(collectionRequest);
 
             var gamesToRequest = collection.Items.Select(item => item.ObjectId).Take(1).ToList();
-            var gamesRequest = new BGGThingsRequest { Id = gamesToRequest, Stats = true };
+            var gamesRequest = new BGGThingsRequest { Id = gamesToRequest, Marketplace = true };
             var games = client.GetThings(gamesRequest);
         }
     }
