@@ -17,7 +17,8 @@ namespace BGGAPI.BGGSharedObjects
     public class Ratings
     {
         // Doesn't work if this is called "Value" - see https://groups.google.com/forum/#!topic/restsharp/eAqzFFM13ns
-        public int value { get; set; }
+        // This can return "N/A" so needs to be a string rather than an integer
+        public string value { get; set; }
 
         public IntValue UsersRated { get; set; }
         public FloatValue Average { get; set; }
