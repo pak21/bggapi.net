@@ -41,8 +41,9 @@ namespace BGGAPI.BGGSharedObjects
         public int Id { get; set; }
         public string Name { get; set; }
         public string FriendlyName { get; set; }
-        // While this may look like an int to you and me, sometimes "Not Ranked" can be returned :-(
+        // This can return "Not Ranked" so needs to be a string rather than an integer
         public string value { get; set; }
-        public float BayesAverage { get; set; }
+        // This can return "Not Ranked" so needs to be a string rather than an integer
+        public string BayesAverage { get; set; }
     }
 }
