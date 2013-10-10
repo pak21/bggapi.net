@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BGGAPI.BGGCollectionObjects;
 using RestSharp;
 using RestSharp.Deserializers;
 
@@ -47,7 +48,8 @@ namespace BGGAPI
             if (string.IsNullOrEmpty(collectionRequest.Username))
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
-            return CallBGG<BGGCollection>("collection", collectionRequest);
+            var rawCollection = CallBGG<Collection>("collection", collectionRequest);
+            return new BGGCollection(rawCollection);
         }
 
         /// <summary>

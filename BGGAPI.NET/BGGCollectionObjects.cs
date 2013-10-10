@@ -1,14 +1,22 @@
 ﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
 
 using System;
+using System.Collections.Generic;
 using BGGAPI.BGGSharedObjects;
 
 namespace BGGAPI.BGGCollectionObjects
 {
+    public class Collection
+    {
+        public int TotalItems { get; set; }
+        public string TermsOfUse { get; set; }
+        public List<Item> Items { get; set; }
+    }
+
     public class Item
     {
-        public string ObjectType { get; set; }
         public int ObjectId { get; set; }
+        public string ObjectType { get; set; }
         public string Subtype { get; set; }
         public int CollId { get; set; }
 

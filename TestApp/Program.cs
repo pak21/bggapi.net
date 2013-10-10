@@ -10,7 +10,7 @@ namespace TestApp
         {
             var client = new BGGClient();
 
-            var collectionRequest = new BGGCollectionRequest { Username = "pak21", Rated = false, Stats = true };
+            var collectionRequest = new BGGCollectionRequest { Username = "pak21", Stats = true };
             var collection = client.GetCollection(collectionRequest);
         }
     }
