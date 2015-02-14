@@ -17,7 +17,7 @@ namespace BGGAPI.NET.Tests
                 value = "Name value"
             };
 
-            var name = new BGGThings.Name(rawName);
+            var name = BGGThings.Mapper.Map<BGGThings.Name>(rawName);
 
             Assert.AreEqual("NameType", name.Type);
             Assert.AreEqual(2, name.SortIndex);
@@ -34,7 +34,7 @@ namespace BGGAPI.NET.Tests
                 TotalVotes = 1234
             };
 
-            var poll = new BGGThings.Poll(rawPoll);
+            var poll = BGGThings.Mapper.Map<BGGThings.Poll>(rawPoll);
 
             Assert.AreEqual("Poll name", poll.Name);
             Assert.AreEqual("Poll title", poll.Title);
@@ -51,7 +51,7 @@ namespace BGGAPI.NET.Tests
                 value = "Link value"
             };
 
-            var link = new BGGThings.Link(rawLink);
+            var link = BGGThings.Mapper.Map<BGGThings.Link>(rawLink);
 
             Assert.AreEqual(1234, link.Id);
             Assert.AreEqual("Link value", link.Name);

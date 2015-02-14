@@ -3,11 +3,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.Mappers;
 
 namespace BGGAPI
 {
     public class BGGThings
     {
+        static BGGThings()
+        {
+            var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
+            configuration.CreateMap<BGGThingsObjects.Link, Link>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
+            configuration.CreateMap<BGGThingsObjects.Name, Name>();
+            configuration.CreateMap<BGGThingsObjects.Poll, Poll>()
+                .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
+
+            Mapper = new MappingEngine(configuration);
+        }
+
+        public static readonly MappingEngine Mapper;
+
         public BGGThings(BGGThingsObjects.Things rawThings)
         {
             TermsOfUse = rawThings.TermsOfUse;
@@ -25,16 +41,16 @@ namespace BGGAPI
                 Id = rawItem.Id;
                 Image = rawItem.Image;
                 Thumbnail = rawItem.Thumbnail;
-                Names = rawItem.Names.Select(n => new Name(n)).ToList();
+                Names = rawItem.Names.Select(Mapper.Map<Name>).ToList();
                 Description = rawItem.Description;
                 YearPublished = rawItem.YearPublished.value;
                 MinimumPlayers = rawItem.MinPlayers.value;
                 MaximumPlayers = rawItem.MaxPlayers.value;
-                Polls = rawItem.Polls.Select(p => new Poll(p)).ToList();
+                Polls = rawItem.Polls.Select(Mapper.Map<Poll>).ToList();
                 PlayingTime = TimeSpan.FromMinutes(rawItem.PlayingTime.value);
                 MinimumAge = rawItem.MinAge.value;
-                Categories = rawItem.Links.Where(l => l.Type == "boardgamecategory").Select(l => new Link(l)).ToList();
-                Links = rawItem.Links.Select(l => new Link(l)).ToList();
+                Categories = rawItem.Links.Where(l => l.Type == "boardgamecategory").Select(Mapper.Map<Link>).ToList();
+                Links = rawItem.Links.Select(Mapper.Map<Link>).ToList();
                 // Videos
                 // Statistics
                 // MarketplaceListings
@@ -63,13 +79,6 @@ namespace BGGAPI
 
         public class Name
         {
-            public Name(BGGThingsObjects.Name rawName)
-            {
-                Type = rawName.Type;
-                SortIndex = rawName.SortIndex;
-                Value = rawName.value;
-            }
-
             public string Type { get; private set; }
             public int SortIndex { get; private set; }
             public string Value { get; private set; }
@@ -77,13 +86,6 @@ namespace BGGAPI
 
         public class Poll
         {
-            public Poll(BGGThingsObjects.Poll rawPoll)
-            {
-                Name = rawPoll.Name;
-                Title = rawPoll.Title;
-                Votes = rawPoll.TotalVotes;
-            }
-
             public string Name { get; private set; }
             public string Title { get; private set; }
             public int Votes { get; private set; }
@@ -91,13 +93,6 @@ namespace BGGAPI
 
         public class Link
         {
-            public Link(BGGThingsObjects.Link rawLink)
-            {
-                Type = rawLink.Type;
-                Id = rawLink.Id;
-                Name = rawLink.value;
-            }
-
             public string Type { get; private set; }
             public int Id { get; private set; }
             public string Name { get; private set; }
