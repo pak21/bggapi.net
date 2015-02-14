@@ -41,9 +41,7 @@ namespace BGGAPI
                 Preordered = rawItem.Status.Preordered != 0;
                 StatusLastModified = rawItem.Status.LastModified;
 
-                StatsAvailable = rawItem.Stats != null;
-
-                if (StatsAvailable)
+                if (rawItem.Stats != null)
                 {
                     var stats = rawItem.Stats;
 
@@ -83,8 +81,6 @@ namespace BGGAPI
             public bool OnWishlist { get; private set; }
             public bool Preordered { get; private set; }
             public DateTime StatusLastModified { get; private set; }
-
-            public bool StatsAvailable { get; private set; }
 
             public int MinimumPlayers { get; private set; }
             public int MaximumPlayers { get; private set; }

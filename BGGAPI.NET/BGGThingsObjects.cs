@@ -6,6 +6,12 @@ using BGGAPI.BGGSharedObjects;
 
 namespace BGGAPI.BGGThingsObjects
 {
+    public class Things
+    {
+        public string TermsOfUse { get; set; }
+        public List<Item> Items { get; set; }
+    }
+
     public class Item
     {
         public string Type { get; set; }

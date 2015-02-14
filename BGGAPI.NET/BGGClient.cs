@@ -6,6 +6,7 @@ using System.Linq;
 using BGGAPI.BGGCollectionObjects;
 using RestSharp;
 using RestSharp.Deserializers;
+using BGGAPI.BGGThingsObjects;
 
 namespace BGGAPI
 {
@@ -62,7 +63,8 @@ namespace BGGAPI
             if (thingsRequest.Id == null || !thingsRequest.Id.Any())
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
-            return CallBGG<BGGThings>("thing", thingsRequest);
+            var rawThings = CallBGG<Things>("thing", thingsRequest);
+            return new BGGThings(rawThings);
         }
 
         private const string ZeroString = "0";

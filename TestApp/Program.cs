@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BGGAPI;
 
@@ -10,8 +11,8 @@ namespace TestApp
         {
             var client = new BGGClient();
 
-            var collectionRequest = new BGGCollectionRequest { Username = "pak21", Stats = true };
-            var collection = client.GetCollection(collectionRequest);
+            var thingsRequest = new BGGThingsRequest { Id = new List<int> {68448}, Stats = true };
+            var things = client.GetThings(thingsRequest);
         }
     }
 }
