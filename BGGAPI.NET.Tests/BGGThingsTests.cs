@@ -88,7 +88,7 @@ namespace BGGAPI.NET.Tests
                 YearPublished = new BGGSharedObjects.IntValue { value = 2000 }
             };
 
-            var item = new BGGThings.Item(rawItem);
+            var item = BGGThings.Mapper.Map<BGGThings.Item>(rawItem);
 
             Assert.AreEqual(1, item.Categories.Count);
             Assert.AreEqual("Category1", item.Categories[0].Name);
@@ -108,6 +108,38 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual("http://www.example.com/thumbnail.jpeg", item.Thumbnail);
             Assert.AreEqual("Item type", item.Type);
             Assert.AreEqual(2000, item.YearPublished);
+        }
+
+        [Test]
+        public void TestThingsConversion()
+        {
+            var rawThings = new BGGThingsObjects.Things
+            {
+                TermsOfUse = "blah",
+                Items = new List<BGGThingsObjects.Item>
+                {
+                    NullItemFactory(123), NullItemFactory(456)
+                }
+            };
+
+            var things = BGGThings.Mapper.Map<BGGThings>(rawThings);
+
+            Assert.AreEqual("blah", things.TermsOfUse);
+            Assert.AreEqual(2, things.Items.Count);
+            Assert.AreEqual(123, things.Items[0].Id);
+        }
+
+        private static BGGThingsObjects.Item NullItemFactory(int id)
+        {
+            return new BGGThingsObjects.Item
+            {
+                Id = id,
+                Links = new List<BGGThingsObjects.Link>(),
+                MaxPlayers = new BGGSharedObjects.IntValue(),
+                MinAge = new BGGSharedObjects.IntValue(),
+                MinPlayers = new BGGSharedObjects.IntValue(),
+                YearPublished = new BGGSharedObjects.IntValue()
+            };
         }
     }
 }

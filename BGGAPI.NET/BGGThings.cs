@@ -13,49 +13,32 @@ namespace BGGAPI
         static BGGThings()
         {
             var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
+
+            configuration.CreateMap<BGGSharedObjects.IntValue, int>().ConvertUsing(src => src.value);
+
+            configuration.CreateMap<BGGThingsObjects.Item, Item>()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
+                .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
+                .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
+                .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
+                .ForMember(dest => dest.PlayingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)));
             configuration.CreateMap<BGGThingsObjects.Link, Link>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
             configuration.CreateMap<BGGThingsObjects.Name, Name>();
             configuration.CreateMap<BGGThingsObjects.Poll, Poll>()
                 .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
+            configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
             Mapper = new MappingEngine(configuration);
         }
 
         public static readonly MappingEngine Mapper;
 
-        public BGGThings(BGGThingsObjects.Things rawThings)
-        {
-            TermsOfUse = rawThings.TermsOfUse;
-            Items = rawThings.Items.Select(i => new Item(i)).ToList();
-        }
-
         public string TermsOfUse { get; private set; }
         public IList<Item> Items { get; private set; }
 
         public class Item
         {
-            public Item(BGGThingsObjects.Item rawItem)
-            {
-                Type = rawItem.Type;
-                Id = rawItem.Id;
-                Image = rawItem.Image;
-                Thumbnail = rawItem.Thumbnail;
-                Names = rawItem.Names.Select(Mapper.Map<Name>).ToList();
-                Description = rawItem.Description;
-                YearPublished = rawItem.YearPublished.value;
-                MinimumPlayers = rawItem.MinPlayers.value;
-                MaximumPlayers = rawItem.MaxPlayers.value;
-                Polls = rawItem.Polls.Select(Mapper.Map<Poll>).ToList();
-                PlayingTime = TimeSpan.FromMinutes(rawItem.PlayingTime.value);
-                MinimumAge = rawItem.MinAge.value;
-                Categories = rawItem.Links.Where(l => l.Type == "boardgamecategory").Select(Mapper.Map<Link>).ToList();
-                Links = rawItem.Links.Select(Mapper.Map<Link>).ToList();
-                // Videos
-                // Statistics
-                // MarketplaceListings
-            }
-
             public string Type { get; private set; }
             public int Id { get; private set; }
 

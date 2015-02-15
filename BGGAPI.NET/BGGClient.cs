@@ -64,7 +64,7 @@ namespace BGGAPI
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
             var rawThings = CallBGG<Things>("thing", thingsRequest);
-            return new BGGThings(rawThings);
+            return BGGThings.Mapper.Map<BGGThings>(rawThings);
         }
 
         private const string ZeroString = "0";
