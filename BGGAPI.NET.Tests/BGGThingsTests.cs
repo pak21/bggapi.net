@@ -111,6 +111,43 @@ namespace BGGAPI.NET.Tests
         }
 
         [Test]
+        public void TestStatisticsConversion()
+        {
+            var rawItem = NullItemFactory(123);
+            rawItem.Statistics = new BGGThingsObjects.Statistics
+            {
+                Ratings = new BGGSharedObjects.Ratings
+                {
+                    Average = new BGGSharedObjects.FloatValue { value = 9.87f },
+                    AverageWeight = new BGGSharedObjects.FloatValue { value = 1.23f },
+                    BayesAverage = new BGGSharedObjects.FloatValue { value = 6.54f },
+                    NumComments = new BGGSharedObjects.IntValue { value = 6 },
+                    NumWeights = new BGGSharedObjects.IntValue { value = 7 },
+                    Owned = new BGGSharedObjects.IntValue { value = 2 },
+                    StdDev = new BGGSharedObjects.FloatValue { value = 3.21f },
+                    Trading = new BGGSharedObjects.IntValue { value = 3 },
+                    UsersRated = new BGGSharedObjects.IntValue { value = 1 },
+                    Wanting = new BGGSharedObjects.IntValue { value = 4 },
+                    Wishing = new BGGSharedObjects.IntValue { value = 5 }
+                }
+            };
+
+            var item = BGGThings.Mapper.Map<BGGThings.Item>(rawItem);
+
+            Assert.AreEqual(9.87f, item.AverageRating);
+            Assert.AreEqual(1.23f, item.AverageWeight);
+            Assert.AreEqual(6.54f, item.BayesAverageRating);
+            Assert.AreEqual(3.21f, item.RatingStandardDeviation);
+            Assert.AreEqual(6, item.NumberOfComments);
+            Assert.AreEqual(7, item.NumberOfWeights);
+            Assert.AreEqual(3, item.UserWhoAreOfferingThisForTrade);
+            Assert.AreEqual(1, item.UsersWhoHaveRatedThis);
+            Assert.AreEqual(5, item.UsersWhoHaveThisOnTheirWishlist);
+            Assert.AreEqual(2, item.UsersWhoOwnThis);
+            Assert.AreEqual(4, item.UserWhoWantThisInTrade);
+        }
+
+        [Test]
         public void TestThingsConversion()
         {
             var rawThings = new BGGThingsObjects.Things
