@@ -14,25 +14,26 @@ namespace BGGAPI
         {
             var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
 
-            configuration.CreateMap<BGGSharedObjects.IntValue, int>().ConvertUsing(src => src.value);
+            configuration.CreateMap<BGGSharedObjects.IntValue, int>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<BGGSharedObjects.FloatValue, float>().NullSafeConvertUsing(src => src.value);
 
             configuration.CreateMap<BGGThingsObjects.Item, Item>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average.value))
-                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight.value))
-                .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage.value))
+                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
+                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
+                .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
                 .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
                 .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
                 .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
-                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments.value))
-                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights.value))
+                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments))
+                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights))
                 .ForMember(dest => dest.PlayingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
-                .ForMember(dest => dest.RatingStandardDeviation, opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev.value))
-                .ForMember(dest => dest.UserWhoAreOfferingThisForTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Trading.value))
-                .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated.value))
-                .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist, opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing.value))
-                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned.value))
-                .ForMember(dest => dest.UserWhoWantThisInTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting.value));
+                .ForMember(dest => dest.RatingStandardDeviation, opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev))
+                .ForMember(dest => dest.UserWhoAreOfferingThisForTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Trading))
+                .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
+                .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist, opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing))
+                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned))
+                .ForMember(dest => dest.UserWhoWantThisInTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting));
             configuration.CreateMap<BGGThingsObjects.Link, Link>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
             configuration.CreateMap<BGGThingsObjects.Name, Name>();
