@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Mappers;
 
@@ -28,6 +29,7 @@ namespace BGGAPI
                 .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments))
                 .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights))
                 .ForMember(dest => dest.PlayingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
+                .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Statistics.Ratings.Ranks))
                 .ForMember(dest => dest.RatingStandardDeviation, opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev))
                 .ForMember(dest => dest.UserWhoAreOfferingThisForTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Trading))
                 .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
@@ -39,9 +41,27 @@ namespace BGGAPI
             configuration.CreateMap<BGGThingsObjects.Name, Name>();
             configuration.CreateMap<BGGThingsObjects.Poll, Poll>()
                 .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
+
+            // The explicit casts are necessary here to convince the compiler that the lambda is
+            // returning a nullable type
+            configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
+                .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
+                .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
             configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
             Mapper = new MappingEngine(configuration);
+        }
+
+        private static TMember FormatExceptionSafeMapping<TSource, TMember>(TSource src, Func<TSource, TMember> sourceMapping)
+        {
+            try
+            {
+                return sourceMapping(src);
+            }
+            catch (FormatException)
+            {
+                return default(TMember);
+            }
         }
 
         public static readonly MappingEngine Mapper;
@@ -81,7 +101,7 @@ namespace BGGAPI
             public int? UsersWhoHaveThisOnTheirWishlist { get; private set; }
             public int? UsersWhoOwnThis { get; private set; }
             public int? UserWhoWantThisInTrade { get; private set; }
-            //TODO public List<Rank> Ranks { get; set; }
+            public List<Ranking> Rankings { get; private set; }
             //TODO public IntValue Median { get; set; }
 
             //public MarketplaceListings MarketplaceListings { get; private set; }
@@ -106,6 +126,16 @@ namespace BGGAPI
             public string Type { get; private set; }
             public int Id { get; private set; }
             public string Name { get; private set; }
+        }
+
+        public class Ranking
+        {
+            public string Type { get; private set; }
+            public int Id { get; private set; }
+            public string Name { get; private set; }
+            public string FriendlyName { get; private set; }
+            public int? Value { get; private set; }
+            public float? BayesAverage { get; private set; }
         }
     }
 }

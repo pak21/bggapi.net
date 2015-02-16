@@ -59,6 +59,48 @@ namespace BGGAPI.NET.Tests
         }
 
         [Test]
+        public void TestRankingConversion()
+        {
+            var rawRanking = new BGGSharedObjects.Rank
+            {
+                Type = "family",
+                Id = 5497,
+                Name = "strategygames",
+                FriendlyName = "Strategy Game Rank",
+                value = "15",
+                BayesAverage = "7.77473"
+            };
+
+            var ranking = BGGThings.Mapper.Map<BGGThings.Ranking>(rawRanking);
+
+            Assert.AreEqual("family", ranking.Type);
+            Assert.AreEqual(5497, ranking.Id);
+            Assert.AreEqual("strategygames", ranking.Name);
+            Assert.AreEqual("Strategy Game Rank", ranking.FriendlyName);
+            Assert.AreEqual(15, ranking.Value);
+            Assert.AreEqual(7.77473f, ranking.BayesAverage);
+        }
+
+        [Test]
+        public void TestRankingConversion_NotRanked()
+        {
+            var rawRanking = new BGGSharedObjects.Rank
+            {
+                Type = "family",
+                Id = 5497,
+                Name = "strategygames",
+                FriendlyName = "Strategy Game Rank",
+                value = "Not Ranked",
+                BayesAverage = "Not Ranked"
+            };
+
+            var ranking = BGGThings.Mapper.Map<BGGThings.Ranking>(rawRanking);
+
+            Assert.IsNull(ranking.Value);
+            Assert.IsNull(ranking.BayesAverage);
+        }
+
+        [Test]
         public void TestItemConversion()
         {
             var rawItem = new BGGThingsObjects.Item()
@@ -124,6 +166,11 @@ namespace BGGAPI.NET.Tests
                     NumComments = new BGGSharedObjects.IntValue { value = 6 },
                     NumWeights = new BGGSharedObjects.IntValue { value = 7 },
                     Owned = new BGGSharedObjects.IntValue { value = 2 },
+                    Ranks = new List<BGGSharedObjects.Rank>{
+                        new BGGSharedObjects.Rank {
+                            Type = "Type1", Id = 2, Name = "Name1", FriendlyName = "FriendlyName1", value = "3", BayesAverage = "4"
+                        }
+                    },
                     StdDev = new BGGSharedObjects.FloatValue { value = 3.21f },
                     Trading = new BGGSharedObjects.IntValue { value = 3 },
                     UsersRated = new BGGSharedObjects.IntValue { value = 1 },
@@ -137,6 +184,8 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(9.87f, item.AverageRating);
             Assert.AreEqual(1.23f, item.AverageWeight);
             Assert.AreEqual(6.54f, item.BayesAverageRating);
+            Assert.AreEqual(1, item.Rankings.Count);
+            Assert.AreEqual(2, item.Rankings[0].Id);
             Assert.AreEqual(3.21f, item.RatingStandardDeviation);
             Assert.AreEqual(6, item.NumberOfComments);
             Assert.AreEqual(7, item.NumberOfWeights);
