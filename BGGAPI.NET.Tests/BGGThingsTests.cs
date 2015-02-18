@@ -102,7 +102,7 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual("Video title", video.Title);
             Assert.AreEqual("Video category", video.Category);
             Assert.AreEqual("English", video.Language);
-            Assert.AreEqual("http://www.example.com/", video.Link);
+            Assert.AreEqual(new Uri("http://www.example.com/"), video.Link);
             Assert.AreEqual("User123", video.Username);
             Assert.AreEqual(2, video.UserId);
             Assert.AreEqual(new DateTime(2015, 1, 2, 3, 4, 5), video.PostDate);
@@ -135,7 +135,7 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(12.34f, listing.CurrencyValue);
             Assert.AreEqual("Mint", listing.Condition);
             Assert.AreEqual("Really mint", listing.Notes);
-            Assert.AreEqual("http://www.example.com/", listing.Link);
+            Assert.AreEqual(new Uri("http://www.example.com/"), listing.Link);
             Assert.AreEqual("Example link", listing.LinkTitle);
         }
 
@@ -202,7 +202,11 @@ namespace BGGAPI.NET.Tests
                     Total = 3,
                     Videos = new List<BGGThingsObjects.Video>
                     {
-                        new BGGThingsObjects.Video { Id = 7 }
+                        new BGGThingsObjects.Video
+                        {
+                            Id = 7,
+                            Link = "http://www.example.com/"
+                        }
                     }
                 },
                 YearPublished = new BGGSharedObjects.IntValue { value = 2000 }

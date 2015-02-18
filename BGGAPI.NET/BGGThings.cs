@@ -52,12 +52,13 @@ namespace BGGAPI
             configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
                 .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
                 .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
-            configuration.CreateMap<BGGThingsObjects.Video, Video>();
+            configuration.CreateMap<BGGThingsObjects.Video, Video>()
+                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
             configuration.CreateMap<BGGThingsObjects.Listing, MarketplaceListing>()
                 .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListDate))
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
                 .ForMember(dest => dest.CurrencyValue, opt => opt.MapFrom(src => src.Price.value))
-                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.Link.HRef))
+                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link.HRef)))
                 .ForMember(dest => dest.LinkTitle, opt => opt.MapFrom(src => src.Link.Title));
             configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
@@ -156,7 +157,7 @@ namespace BGGAPI
             public string Title { get; private set; }
             public string Category { get; private set; }
             public string Language { get; private set; }
-            public string Link { get; private set; }
+            public Uri Link { get; private set; }
             public string Username { get; private set; }
             public int UserId { get; private set; }
             public DateTime PostDate { get; private set; }
@@ -169,7 +170,7 @@ namespace BGGAPI
             public float CurrencyValue { get; private set; }
             public string Condition { get; private set; }
             public string Notes { get; private set; }
-            public string Link { get; private set; }
+            public Uri Link { get; private set; }
             public string LinkTitle { get; private set; }
         }
     }
