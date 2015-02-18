@@ -25,6 +25,7 @@ namespace BGGAPI
                 .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
                 .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => new Uri("http:" + src.Image)))
                 .ForMember(dest => dest.MarketplaceListings, opt => opt.MapFrom(src => src.MarketplaceListings.Listings))
                 .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
                 .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median))
@@ -35,6 +36,7 @@ namespace BGGAPI
                 .ForMember(dest => dest.PlayingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
                 .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Statistics.Ratings.Ranks))
                 .ForMember(dest => dest.RatingStandardDeviation, opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev))
+                .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => new Uri("http:" + src.Thumbnail)))
                 .ForMember(dest => dest.UserWhoAreOfferingThisForTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Trading))
                 .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
                 .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist, opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing))
@@ -87,8 +89,8 @@ namespace BGGAPI
             public string Type { get; private set; }
             public int Id { get; private set; }
 
-            public string Image { get; private set; }
-            public string Thumbnail { get; private set; }
+            public Uri Image { get; private set; }
+            public Uri Thumbnail { get; private set; }
             public IList<Name> Names { get; private set; }
             public string Description { get; private set; }
             public int YearPublished { get; private set; }

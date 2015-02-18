@@ -165,7 +165,7 @@ namespace BGGAPI.NET.Tests
             {
                 Description = "Item description",
                 Id = 1234,
-                Image = "http://www.example.com/image.jpeg",
+                Image = "//www.example.com/image.jpeg",
                 Links = new List<BGGThingsObjects.Link>
                 {
                     new BGGThingsObjects.Link { Type = "boardgamecategory", value = "Category1" },
@@ -195,7 +195,7 @@ namespace BGGAPI.NET.Tests
                     new BGGThingsObjects.Poll { Name = "D" },
                     new BGGThingsObjects.Poll { Name = "E" }
                 },
-                Thumbnail = "http://www.example.com/thumbnail.jpeg",
+                Thumbnail = "//www.example.com/thumbnail.jpeg",
                 Type = "Item type",
                 Videos = new BGGThingsObjects.VideosList
                 {
@@ -218,7 +218,7 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual("Category1", item.Categories[0].Name);
             Assert.AreEqual("Item description", item.Description);
             Assert.AreEqual(1234, item.Id);
-            Assert.AreEqual("http://www.example.com/image.jpeg", item.Image);
+            Assert.AreEqual(new Uri("http://www.example.com/image.jpeg"), item.Image);
             Assert.AreEqual(2, item.Links.Count);
             Assert.AreEqual("bar", item.Links[1].Name);
             Assert.AreEqual(1, item.MarketplaceListings.Count);
@@ -231,7 +231,7 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(TimeSpan.FromMinutes(60), item.PlayingTime);
             Assert.AreEqual(3, item.Polls.Count);
             Assert.AreEqual("C", item.Polls[0].Name);
-            Assert.AreEqual("http://www.example.com/thumbnail.jpeg", item.Thumbnail);
+            Assert.AreEqual(new Uri("http://www.example.com/thumbnail.jpeg"), item.Thumbnail);
             Assert.AreEqual("Item type", item.Type);
             Assert.AreEqual(1, item.Videos.Count);
             Assert.AreEqual(7, item.Videos[0].Id);
@@ -310,10 +310,12 @@ namespace BGGAPI.NET.Tests
             return new BGGThingsObjects.Item
             {
                 Id = id,
+                Image = "//localhost",
                 Links = new List<BGGThingsObjects.Link>(),
                 MaxPlayers = new BGGSharedObjects.IntValue(),
                 MinAge = new BGGSharedObjects.IntValue(),
                 MinPlayers = new BGGSharedObjects.IntValue(),
+                Thumbnail = "//localhost",
                 YearPublished = new BGGSharedObjects.IntValue()
             };
         }
