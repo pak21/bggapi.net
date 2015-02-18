@@ -24,6 +24,7 @@ namespace BGGAPI
                 .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
                 .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
+                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median))
                 .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
                 .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
                 .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments))
@@ -35,7 +36,8 @@ namespace BGGAPI
                 .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
                 .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist, opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing))
                 .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned))
-                .ForMember(dest => dest.UserWhoWantThisInTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting));
+                .ForMember(dest => dest.UserWhoWantThisInTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting))
+                .ForMember(dest => dest.Videos, opt => opt.MapFrom(src => src.Videos.Videos));
             configuration.CreateMap<BGGThingsObjects.Link, Link>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
             configuration.CreateMap<BGGThingsObjects.Name, Name>();
@@ -47,6 +49,7 @@ namespace BGGAPI
             configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
                 .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
                 .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
+            configuration.CreateMap<BGGThingsObjects.Video, Video>();
             configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
             Mapper = new MappingEngine(configuration);
@@ -87,7 +90,7 @@ namespace BGGAPI
             public IList<Link> Categories { get; private set; }
             
             public IList<Link> Links { get; private set; }
-            //public VideosList Videos { get; private set; }
+            public IList<Video> Videos { get; private set; }
 
             // We pull the statistics members up to the top-level
             public float? AverageRating { get; private set; }
@@ -102,7 +105,7 @@ namespace BGGAPI
             public int? UsersWhoOwnThis { get; private set; }
             public int? UserWhoWantThisInTrade { get; private set; }
             public List<Ranking> Rankings { get; private set; }
-            //TODO public IntValue Median { get; set; }
+            public int? Median { get; private set; }
 
             //public MarketplaceListings MarketplaceListings { get; private set; }
         }
@@ -136,6 +139,18 @@ namespace BGGAPI
             public string FriendlyName { get; private set; }
             public int? Value { get; private set; }
             public float? BayesAverage { get; private set; }
+        }
+
+        public class Video
+        {
+            public int Id { get; private set; }
+            public string Title { get; private set; }
+            public string Category { get; private set; }
+            public string Language { get; private set; }
+            public string Link { get; private set; }
+            public string Username { get; private set; }
+            public int UserId { get; private set; }
+            public DateTime PostDate { get; private set; }
         }
     }
 }

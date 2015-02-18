@@ -82,6 +82,33 @@ namespace BGGAPI.NET.Tests
         }
 
         [Test]
+        public void TestVideoConversion()
+        {
+            var rawVideo = new BGGThingsObjects.Video
+            {
+                Id = 1,
+                Title = "Video title",
+                Category = "Video category",
+                Language = "English",
+                Link = "http://www.example.com/",
+                Username = "User123",
+                UserId = 2,
+                PostDate = new DateTime(2015, 1, 2, 3, 4, 5)
+            };
+
+            var video = BGGThings.Mapper.Map<BGGThings.Video>(rawVideo);
+
+            Assert.AreEqual(1, video.Id);
+            Assert.AreEqual("Video title", video.Title);
+            Assert.AreEqual("Video category", video.Category);
+            Assert.AreEqual("English", video.Language);
+            Assert.AreEqual("http://www.example.com/", video.Link);
+            Assert.AreEqual("User123", video.Username);
+            Assert.AreEqual(2, video.UserId);
+            Assert.AreEqual(new DateTime(2015, 1, 2, 3, 4, 5), video.PostDate);
+        }
+
+        [Test]
         public void TestRankingConversion_NotRanked()
         {
             var rawRanking = new BGGSharedObjects.Rank
@@ -127,6 +154,12 @@ namespace BGGAPI.NET.Tests
                 },
                 Thumbnail = "http://www.example.com/thumbnail.jpeg",
                 Type = "Item type",
+                Videos = new BGGThingsObjects.VideosList {
+                    Total = 3,
+                    Videos = new List<BGGThingsObjects.Video> {
+                        new BGGThingsObjects.Video { Id = 7 }
+                    }
+                },
                 YearPublished = new BGGSharedObjects.IntValue { value = 2000 }
             };
 
@@ -149,6 +182,8 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual("C", item.Polls[0].Name);
             Assert.AreEqual("http://www.example.com/thumbnail.jpeg", item.Thumbnail);
             Assert.AreEqual("Item type", item.Type);
+            Assert.AreEqual(1, item.Videos.Count);
+            Assert.AreEqual(7, item.Videos[0].Id);
             Assert.AreEqual(2000, item.YearPublished);
         }
 
@@ -163,6 +198,7 @@ namespace BGGAPI.NET.Tests
                     Average = new BGGSharedObjects.FloatValue { value = 9.87f },
                     AverageWeight = new BGGSharedObjects.FloatValue { value = 1.23f },
                     BayesAverage = new BGGSharedObjects.FloatValue { value = 6.54f },
+                    Median = new BGGSharedObjects.IntValue { value = 8 },
                     NumComments = new BGGSharedObjects.IntValue { value = 6 },
                     NumWeights = new BGGSharedObjects.IntValue { value = 7 },
                     Owned = new BGGSharedObjects.IntValue { value = 2 },
@@ -184,11 +220,12 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(9.87f, item.AverageRating);
             Assert.AreEqual(1.23f, item.AverageWeight);
             Assert.AreEqual(6.54f, item.BayesAverageRating);
+            Assert.AreEqual(8, item.Median);
+            Assert.AreEqual(6, item.NumberOfComments);
+            Assert.AreEqual(7, item.NumberOfWeights);
             Assert.AreEqual(1, item.Rankings.Count);
             Assert.AreEqual(2, item.Rankings[0].Id);
             Assert.AreEqual(3.21f, item.RatingStandardDeviation);
-            Assert.AreEqual(6, item.NumberOfComments);
-            Assert.AreEqual(7, item.NumberOfWeights);
             Assert.AreEqual(3, item.UserWhoAreOfferingThisForTrade);
             Assert.AreEqual(1, item.UsersWhoHaveRatedThis);
             Assert.AreEqual(5, item.UsersWhoHaveThisOnTheirWishlist);
