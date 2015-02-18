@@ -15,14 +15,17 @@ namespace BGGAPI
         {
             var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
 
+            configuration.CreateMap<BGGThingsObjects.DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
             configuration.CreateMap<BGGSharedObjects.IntValue, int>().NullSafeConvertUsing(src => src.value);
             configuration.CreateMap<BGGSharedObjects.FloatValue, float>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<BGGThingsObjects.StringValue, string>().NullSafeConvertUsing(src => src.value);
 
             configuration.CreateMap<BGGThingsObjects.Item, Item>()
                 .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
                 .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
                 .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
                 .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
+                .ForMember(dest => dest.MarketplaceListings, opt => opt.MapFrom(src => src.MarketplaceListings.Listings))
                 .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
                 .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median))
                 .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
@@ -50,6 +53,12 @@ namespace BGGAPI
                 .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
                 .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
             configuration.CreateMap<BGGThingsObjects.Video, Video>();
+            configuration.CreateMap<BGGThingsObjects.Listing, MarketplaceListing>()
+                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListDate))
+                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
+                .ForMember(dest => dest.CurrencyValue, opt => opt.MapFrom(src => src.Price.value))
+                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.Link.HRef))
+                .ForMember(dest => dest.LinkTitle, opt => opt.MapFrom(src => src.Link.Title));
             configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
             Mapper = new MappingEngine(configuration);
@@ -107,7 +116,7 @@ namespace BGGAPI
             public List<Ranking> Rankings { get; private set; }
             public int? Median { get; private set; }
 
-            //public MarketplaceListings MarketplaceListings { get; private set; }
+            public List<MarketplaceListing> MarketplaceListings { get; private set; }
         }
 
         public class Name
@@ -151,6 +160,17 @@ namespace BGGAPI
             public string Username { get; private set; }
             public int UserId { get; private set; }
             public DateTime PostDate { get; private set; }
+        }
+
+        public class MarketplaceListing
+        {
+            public DateTime ListingDate { get; private set; }
+            public string Currency { get; private set; }
+            public float CurrencyValue { get; private set; }
+            public string Condition { get; private set; }
+            public string Notes { get; private set; }
+            public string Link { get; private set; }
+            public string LinkTitle { get; private set; }
         }
     }
 }

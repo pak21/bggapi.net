@@ -109,6 +109,37 @@ namespace BGGAPI.NET.Tests
         }
 
         [Test]
+        public void TestListingConversion()
+        {
+            var rawListing = new BGGThingsObjects.Listing
+            {
+                ListDate = new BGGThingsObjects.DateTimeValue { value = new DateTime(2014, 6, 7, 8, 9, 10) },
+                Price = new BGGThingsObjects.MoneyValue
+                {
+                    Currency = "GBP",
+                    value = 12.34f
+                },
+                Condition = new BGGThingsObjects.StringValue { value = "Mint" },
+                Notes = new BGGThingsObjects.StringValue { value = "Really mint" },
+                Link = new BGGThingsObjects.LinkValue
+                {
+                    HRef = "http://www.example.com/",
+                    Title = "Example link"
+                }
+            };
+
+            var listing = BGGThings.Mapper.Map<BGGThings.MarketplaceListing>(rawListing);
+
+            Assert.AreEqual(new DateTime(2014, 6, 7, 8, 9, 10), listing.ListingDate);
+            Assert.AreEqual("GBP", listing.Currency);
+            Assert.AreEqual(12.34f, listing.CurrencyValue);
+            Assert.AreEqual("Mint", listing.Condition);
+            Assert.AreEqual("Really mint", listing.Notes);
+            Assert.AreEqual("http://www.example.com/", listing.Link);
+            Assert.AreEqual("Example link", listing.LinkTitle);
+        }
+
+        [Test]
         public void TestRankingConversion_NotRanked()
         {
             var rawRanking = new BGGSharedObjects.Rank
@@ -135,14 +166,26 @@ namespace BGGAPI.NET.Tests
                 Description = "Item description",
                 Id = 1234,
                 Image = "http://www.example.com/image.jpeg",
-                Links = new List<BGGThingsObjects.Link> {
+                Links = new List<BGGThingsObjects.Link>
+                {
                     new BGGThingsObjects.Link { Type = "boardgamecategory", value = "Category1" },
                     new BGGThingsObjects.Link { Type = "foo", value = "bar" },
+                },
+                MarketplaceListings = new BGGThingsObjects.MarketplaceListings
+                {
+                    Listings = new List<BGGThingsObjects.Listing>
+                    {
+                        new BGGThingsObjects.Listing
+                        {
+                            Condition = new BGGThingsObjects.StringValue { value = "Bashed" }
+                        }
+                    }
                 },
                 MaxPlayers = new BGGSharedObjects.IntValue { value = 4 },
                 MinAge = new BGGSharedObjects.IntValue { value = 18 },
                 MinPlayers = new BGGSharedObjects.IntValue { value = 1 },
-                Names = new List<BGGThingsObjects.Name> {
+                Names = new List<BGGThingsObjects.Name>
+                {
                     new BGGThingsObjects.Name { value = "A" },
                     new BGGThingsObjects.Name { value = "B" }
                 },
@@ -154,9 +197,11 @@ namespace BGGAPI.NET.Tests
                 },
                 Thumbnail = "http://www.example.com/thumbnail.jpeg",
                 Type = "Item type",
-                Videos = new BGGThingsObjects.VideosList {
+                Videos = new BGGThingsObjects.VideosList
+                {
                     Total = 3,
-                    Videos = new List<BGGThingsObjects.Video> {
+                    Videos = new List<BGGThingsObjects.Video>
+                    {
                         new BGGThingsObjects.Video { Id = 7 }
                     }
                 },
@@ -172,6 +217,8 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual("http://www.example.com/image.jpeg", item.Image);
             Assert.AreEqual(2, item.Links.Count);
             Assert.AreEqual("bar", item.Links[1].Name);
+            Assert.AreEqual(1, item.MarketplaceListings.Count);
+            Assert.AreEqual("Bashed", item.MarketplaceListings[0].Condition);
             Assert.AreEqual(4, item.MaximumPlayers);
             Assert.AreEqual(18, item.MinimumAge);
             Assert.AreEqual(1, item.MinimumPlayers);
@@ -202,8 +249,10 @@ namespace BGGAPI.NET.Tests
                     NumComments = new BGGSharedObjects.IntValue { value = 6 },
                     NumWeights = new BGGSharedObjects.IntValue { value = 7 },
                     Owned = new BGGSharedObjects.IntValue { value = 2 },
-                    Ranks = new List<BGGSharedObjects.Rank>{
-                        new BGGSharedObjects.Rank {
+                    Ranks = new List<BGGSharedObjects.Rank>
+                    {
+                        new BGGSharedObjects.Rank
+                        {
                             Type = "Type1", Id = 2, Name = "Name1", FriendlyName = "FriendlyName1", value = "3", BayesAverage = "4"
                         }
                     },
