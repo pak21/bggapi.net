@@ -116,7 +116,7 @@ namespace BGGAPI
             public List<Ranking> Rankings { get; private set; }
             public int? Median { get; private set; }
 
-            public List<MarketplaceListing> MarketplaceListings { get; private set; }
+            public IList<MarketplaceListing> MarketplaceListings { get; private set; }
         }
 
         public class Name
