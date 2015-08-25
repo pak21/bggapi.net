@@ -115,16 +115,6 @@ namespace BGGAPI
 
         public class Ranking
         {
-            //public Ranking(BGGSharedObjects.Rank rawRanking)
-            //{
-            //    Type = rawRanking.Type;
-            //    IdWithinType = rawRanking.Id;
-            //    Name = rawRanking.Name;
-            //    FriendlyName = rawRanking.FriendlyName;
-            //    Position = rawRanking.value == "Not Ranked" ? (int?)null : int.Parse(rawRanking.value);
-            //    BayesianAverageRating = rawRanking.BayesAverage == "Not Ranked" ? (float?)null : float.Parse(rawRanking.BayesAverage);
-            //}
-
             public string Type { get; private set; }
             public int IdWithinType { get; private set; }
             public string Name { get; private set; }
