@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using BGGAPI.BGGCollectionObjects;
+using BGGAPI.BGGSharedObjects;
 using NUnit.Framework;
 
 namespace BGGAPI.NET.Tests
@@ -60,8 +62,8 @@ namespace BGGAPI.NET.Tests
                 CollId = 2,
                 Name = "My Funky Boardgame",
                 YearPublished = "2015",
-                Image = "//localhost",
-                Thumbnail = "//localhost",
+                Image = "//www.example.com/image.jpeg",
+                Thumbnail = "//www.example.com/thumbnail.jpeg",
                 NumPlays = 3,
 
                 Status = new Status
@@ -86,8 +88,8 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(2, item.CollectionId);
             Assert.AreEqual("My Funky Boardgame", item.Name);
             Assert.AreEqual("2015", item.YearPublished);
-            Assert.AreEqual("//localhost", item.Image);
-            Assert.AreEqual("//localhost", item.Thumbnail);
+            Assert.AreEqual("//www.example.com/image.jpeg", item.Image);
+            Assert.AreEqual("//www.example.com/thumbnail.jpeg", item.Thumbnail);
             Assert.AreEqual(3, item.NumberOfPlays);
 
             Assert.IsTrue(item.Owned);
@@ -99,6 +101,55 @@ namespace BGGAPI.NET.Tests
             Assert.IsTrue(item.OnWishlist);
             Assert.IsFalse(item.Preordered);
             Assert.AreEqual(new DateTime(2015, 8, 25, 21, 14, 32, DateTimeKind.Utc), item.StatusLastModified);
+        }
+
+        [Test]
+        public void TestStatisticsConversion()
+        {
+            var rawItem = NullItemFactory();
+            rawItem.Stats = new Stats
+            {
+                MinPlayers = 1,
+                MaxPlayers = 2,
+                NumOwned = 3,
+                PlayingTime = 4,
+
+                Rating = new Ratings
+                {
+                    value = "5.6",
+                    UsersRated = new IntValue { value = 7 },
+                    Average = new FloatValue { value = 8.9f },
+                    BayesAverage = new FloatValue { value = 1.2f },
+                    StdDev = new FloatValue { value = 3.4f },
+                    Median = new IntValue { value = 5 },
+                    Ranks = new List<Rank> { new Rank { Id = 6, value = "0", BayesAverage = "0" } }
+                }
+            };
+
+            var item = new BGGCollection.Item(rawItem);
+
+            Assert.AreEqual(1, item.MinimumPlayers);
+            Assert.AreEqual(2, item.MaximumPlayers);
+            Assert.AreEqual(3, item.NumberOfOwners);
+            Assert.AreEqual(TimeSpan.FromMinutes(4), item.PlayingTime);
+
+            Assert.AreEqual(5.6f, item.RatingFromThisUser);
+            Assert.AreEqual(7, item.UsersRatingThisItem);
+            Assert.AreEqual(8.9f, item.AverageRating);
+            Assert.AreEqual(1.2f, item.BayesianAverageRating);
+            Assert.AreEqual(3.4f, item.RatingStandardDeviation);
+            Assert.AreEqual(5, item.Median);
+
+            Assert.AreEqual(1, item.Rankings.Count);
+            Assert.AreEqual(6, item.Rankings[0].IdWithinType);
+        }
+
+        private static Item NullItemFactory()
+        {
+            return new Item
+            {
+                Status = new Status()
+            };
         }
     }
 }
