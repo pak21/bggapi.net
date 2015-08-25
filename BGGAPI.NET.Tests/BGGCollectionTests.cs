@@ -106,7 +106,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestStatisticsConversion()
         {
-            var rawItem = NullItemFactory();
+            var rawItem = NullItemFactory(123);
             rawItem.Stats = new Stats
             {
                 MinPlayers = 1,
@@ -144,10 +144,30 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(6, item.Rankings[0].IdWithinType);
         }
 
-        private static Item NullItemFactory()
+        [Test]
+        public void TestCollectionConversion()
+        {
+            var rawCollection = new Collection
+            {
+                TermsOfUse = "blah",
+                Items = new List<Item>
+                {
+                    NullItemFactory(123), NullItemFactory(456)
+                }
+            };
+
+            var collection = new BGGCollection(rawCollection);
+
+            Assert.AreEqual("blah", collection.TermsOfUse);
+            Assert.AreEqual(2, collection.Items.Count);
+            Assert.AreEqual(123, collection.Items[0].Id);
+        }
+
+        private static Item NullItemFactory(int id)
         {
             return new Item
             {
+                ObjectId = id,
                 Status = new Status()
             };
         }
