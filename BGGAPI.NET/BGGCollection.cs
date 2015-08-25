@@ -19,6 +19,41 @@ namespace BGGAPI
                 .ForMember(dest => dest.Position, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
                 .ForMember(dest => dest.BayesianAverageRating, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
 
+            configuration.CreateMap<BGGCollectionObjects.Item, Item>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ObjectType))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
+                .ForMember(dest => dest.CollectionId, opt => opt.MapFrom(src => src.CollId))
+                .ForMember(dest => dest.NumberOfPlays, opt => opt.MapFrom(src => src.NumPlays))
+                .ForMember(dest => dest.Owned, opt => opt.MapFrom(src => src.Status.Own != 0))
+                .ForMember(dest => dest.PreviouslyOwned, opt => opt.MapFrom(src => src.Status.PrevOwned != 0))
+                .ForMember(dest => dest.AvailableForTrade, opt => opt.MapFrom(src => src.Status.ForTrade != 0))
+                .ForMember(dest => dest.WantInTrade, opt => opt.MapFrom(src => src.Status.Want != 0))
+                .ForMember(dest => dest.WantToPlay, opt => opt.MapFrom(src => src.Status.WantToPlay != 0))
+                .ForMember(dest => dest.WantToBuy, opt => opt.MapFrom(src => src.Status.WantToBuy != 0))
+                .ForMember(dest => dest.OnWishlist, opt => opt.MapFrom(src => src.Status.Wishlist != 0))
+                .ForMember(dest => dest.Preordered, opt => opt.MapFrom(src => src.Status.Preordered != 0))
+                .ForMember(dest => dest.StatusLastModified, opt => opt.MapFrom(src => src.Status.LastModified))
+                .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.Stats.MinPlayers))
+                .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.Stats.MaxPlayers))
+                .ForMember(dest => dest.NumberOfOwners, opt => opt.MapFrom(src => src.Stats.NumOwned))
+                .ForMember(dest => dest.PlayingTime,
+                    opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.Stats.PlayingTime)))
+                .ForMember(dest => dest.RatingFromThisUser,
+                    opt =>
+                        opt.ResolveUsing(
+                            src =>
+                                AutomapperHelpers.FormatExceptionSafeMapping(src,
+                                    s => s.Stats != null && s.Stats.Rating != null ? (float?) float.Parse(s.Stats.Rating.value) : null)))
+                .ForMember(dest => dest.UsersRatingThisItem,
+                    opt => opt.MapFrom(src => src.Stats.Rating.UsersRated.value))
+                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Stats.Rating.Average.value))
+                .ForMember(dest => dest.BayesianAverageRating,
+                    opt => opt.MapFrom(src => src.Stats.Rating.BayesAverage.value))
+                .ForMember(dest => dest.RatingStandardDeviation,
+                    opt => opt.MapFrom(src => src.Stats.Rating.StdDev.value))
+                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Stats.Rating.Median.value))
+                .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Stats.Rating.Ranks));
+
             Mapper = new MappingEngine(configuration);
         }
 
@@ -26,7 +61,7 @@ namespace BGGAPI
 
         public BGGCollection(BGGCollectionObjects.Collection rawCollection)
         {
-            Items = rawCollection.Items.Select(i => new Item(i)).ToList();
+            Items = rawCollection.Items.Select(i => Mapper.Map<Item>(i)).ToList();
             TermsOfUse = rawCollection.TermsOfUse;
         }
 
@@ -35,49 +70,6 @@ namespace BGGAPI
 
         public class Item
         {
-            public Item(BGGCollectionObjects.Item rawItem)
-            {
-                Type = rawItem.ObjectType;
-                Id = rawItem.ObjectId;
-                Subtype = rawItem.Subtype;
-                CollectionId = rawItem.CollId;
-                Name = rawItem.Name;
-                YearPublished = rawItem.YearPublished;
-                Image = rawItem.Image;
-                Thumbnail = rawItem.Thumbnail;
-                NumberOfPlays = rawItem.NumPlays;
-
-                Owned = rawItem.Status.Own != 0;
-                PreviouslyOwned = rawItem.Status.PrevOwned != 0;
-                AvailableForTrade = rawItem.Status.ForTrade != 0;
-                WantInTrade = rawItem.Status.Want != 0;
-                WantToPlay = rawItem.Status.WantToPlay != 0;
-                WantToBuy = rawItem.Status.WantToBuy != 0;
-                OnWishlist = rawItem.Status.Wishlist != 0;
-                Preordered = rawItem.Status.Preordered != 0;
-                StatusLastModified = rawItem.Status.LastModified;
-
-                if (rawItem.Stats != null)
-                {
-                    var stats = rawItem.Stats;
-
-                    MinimumPlayers = stats.MinPlayers;
-                    MaximumPlayers = stats.MaxPlayers;
-                    PlayingTime = TimeSpan.FromMinutes(stats.PlayingTime);
-                    NumberOfOwners = stats.NumOwned;
-
-                    var rating = stats.Rating;
-
-                    RatingFromThisUser = rating.value == "N/A" ? (float?)null : float.Parse(rating.value);
-                    UsersRatingThisItem = rating.UsersRated.value;
-                    AverageRating = rating.Average.value;
-                    BayesianAverageRating = rating.BayesAverage.value;
-                    RatingStandardDeviation = rating.StdDev.value;
-                    Median = rating.Median.value;
-                    Rankings = rating.Ranks.Select(r => Mapper.Map<Ranking>(r)).ToList();
-                }
-            }
-
             public int Id { get; private set; }
             public string Type { get; private set; }
             public string Subtype { get; private set; }

@@ -80,7 +80,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var item = new BGGCollection.Item(rawItem);
+            var item = BGGCollection.Mapper.Map<BGGCollection.Item>(rawItem);
 
             Assert.AreEqual("thing", item.Type);
             Assert.AreEqual(1, item.Id);
@@ -126,7 +126,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var item = new BGGCollection.Item(rawItem);
+            var item = BGGCollection.Mapper.Map<BGGCollection.Item>(rawItem);
 
             Assert.AreEqual(1, item.MinimumPlayers);
             Assert.AreEqual(2, item.MaximumPlayers);
