@@ -54,16 +54,12 @@ namespace BGGAPI
                 .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Stats.Rating.Median.value))
                 .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Stats.Rating.Ranks));
 
+            configuration.CreateMap<BGGCollectionObjects.Collection, BGGCollection>();
+
             Mapper = new MappingEngine(configuration);
         }
 
         public static readonly MappingEngine Mapper;
-
-        public BGGCollection(BGGCollectionObjects.Collection rawCollection)
-        {
-            Items = rawCollection.Items.Select(i => Mapper.Map<Item>(i)).ToList();
-            TermsOfUse = rawCollection.TermsOfUse;
-        }
 
         public IList<Item> Items { get; private set; }
         public string TermsOfUse { get; private set; }

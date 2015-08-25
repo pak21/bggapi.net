@@ -50,7 +50,7 @@ namespace BGGAPI
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
             var rawCollection = CallBGG<Collection>("collection", collectionRequest);
-            return new BGGCollection(rawCollection);
+            return BGGCollection.Mapper.Map<BGGCollection>(rawCollection);
         }
 
         /// <summary>

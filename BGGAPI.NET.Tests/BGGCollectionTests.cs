@@ -156,7 +156,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var collection = new BGGCollection(rawCollection);
+            var collection = BGGCollection.Mapper.Map<BGGCollection>(rawCollection);
 
             Assert.AreEqual("blah", collection.TermsOfUse);
             Assert.AreEqual(2, collection.Items.Count);
