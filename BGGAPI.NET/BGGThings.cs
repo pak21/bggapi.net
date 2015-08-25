@@ -52,8 +52,8 @@ namespace BGGAPI
             // The explicit casts are necessary here to convince the compiler that the lambda is
             // returning a nullable type
             configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
-                .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
-                .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
+                .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
+                .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
             configuration.CreateMap<BGGThingsObjects.Video, Video>()
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
             configuration.CreateMap<BGGThingsObjects.Listing, MarketplaceListing>()
@@ -65,18 +65,6 @@ namespace BGGAPI
             configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
 
             Mapper = new MappingEngine(configuration);
-        }
-
-        private static TMember FormatExceptionSafeMapping<TSource, TMember>(TSource src, Func<TSource, TMember> sourceMapping)
-        {
-            try
-            {
-                return sourceMapping(src);
-            }
-            catch (FormatException)
-            {
-                return default(TMember);
-            }
         }
 
         public static readonly MappingEngine Mapper;

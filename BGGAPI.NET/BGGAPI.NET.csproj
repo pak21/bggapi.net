@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomapperExtensions.cs" />
+    <Compile Include="AutomapperHelpers.cs" />
     <Compile Include="BGGClient.cs" />
     <Compile Include="BGGCollection.cs" />
     <Compile Include="BGGCollectionObjects.cs" />

@@ -3,11 +3,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using AutoMapper.Mappers;
 
 namespace BGGAPI
 {
     public class BGGCollection
     {
+        static BGGCollection()
+        {
+            var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
+
+            configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
+                .ForMember(dest => dest.IdWithinType, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Position, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
+                .ForMember(dest => dest.BayesianAverageRating, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
+
+            Mapper = new MappingEngine(configuration);
+        }
+
+        public static readonly MappingEngine Mapper;
+
         public BGGCollection(BGGCollectionObjects.Collection rawCollection)
         {
             Items = rawCollection.Items.Select(i => new Item(i)).ToList();
@@ -58,7 +74,7 @@ namespace BGGAPI
                     BayesianAverageRating = rating.BayesAverage.value;
                     RatingStandardDeviation = rating.StdDev.value;
                     Median = rating.Median.value;
-                    Rankings = rating.Ranks.Select(r => new Ranking(r)).ToList();
+                    Rankings = rating.Ranks.Select(r => Mapper.Map<Ranking>(r)).ToList();
                 }
             }
 
@@ -99,15 +115,15 @@ namespace BGGAPI
 
         public class Ranking
         {
-            public Ranking(BGGSharedObjects.Rank rawRanking)
-            {
-                Type = rawRanking.Type;
-                IdWithinType = rawRanking.Id;
-                Name = rawRanking.Name;
-                FriendlyName = rawRanking.FriendlyName;
-                Position = rawRanking.value == "Not Ranked" ? (int?)null : int.Parse(rawRanking.value);
-                BayesianAverageRating = rawRanking.BayesAverage == "Not Ranked" ? (float?)null : float.Parse(rawRanking.BayesAverage);
-            }
+            //public Ranking(BGGSharedObjects.Rank rawRanking)
+            //{
+            //    Type = rawRanking.Type;
+            //    IdWithinType = rawRanking.Id;
+            //    Name = rawRanking.Name;
+            //    FriendlyName = rawRanking.FriendlyName;
+            //    Position = rawRanking.value == "Not Ranked" ? (int?)null : int.Parse(rawRanking.value);
+            //    BayesianAverageRating = rawRanking.BayesAverage == "Not Ranked" ? (float?)null : float.Parse(rawRanking.BayesAverage);
+            //}
 
             public string Type { get; private set; }
             public int IdWithinType { get; private set; }
