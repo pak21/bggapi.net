@@ -36,6 +36,8 @@ namespace BGGAPI
                 .ForMember(dest => dest.CollectionId, opt => opt.MapFrom(src => src.CollId))
                 .ForMember(dest => dest.NumberOfPlays, opt => opt.MapFrom(src => src.NumPlays))
                 .ForMember(dest => dest.Owned, opt => opt.MapFrom(src => src.Status.Own != 0))
+                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => new Uri("http:" + src.Image)))
+                .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => new Uri("http:" + src.Thumbnail)))
                 .ForMember(dest => dest.PreviouslyOwned, opt => opt.MapFrom(src => src.Status.PrevOwned != 0))
                 .ForMember(dest => dest.AvailableForTrade, opt => opt.MapFrom(src => src.Status.ForTrade != 0))
                 .ForMember(dest => dest.WantInTrade, opt => opt.MapFrom(src => src.Status.Want != 0))

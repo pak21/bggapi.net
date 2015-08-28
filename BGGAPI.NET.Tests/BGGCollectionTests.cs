@@ -88,8 +88,8 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(2, item.CollectionId);
             Assert.AreEqual("My Funky Boardgame", item.Name);
             Assert.AreEqual("2015", item.YearPublished);
-            Assert.AreEqual("//www.example.com/image.jpeg", item.Image);
-            Assert.AreEqual("//www.example.com/thumbnail.jpeg", item.Thumbnail);
+            Assert.AreEqual(new Uri("http://www.example.com/image.jpeg"), item.Image);
+            Assert.AreEqual(new Uri("http://www.example.com/thumbnail.jpeg"), item.Thumbnail);
             Assert.AreEqual(3, item.NumberOfPlays);
 
             Assert.IsTrue(item.Owned);
@@ -168,7 +168,9 @@ namespace BGGAPI.NET.Tests
             return new Item
             {
                 ObjectId = id,
-                Status = new Status()
+                Status = new Status(),
+                Image = "//localhost",
+                Thumbnail = "//localhost"
             };
         }
     }

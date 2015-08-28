@@ -19,8 +19,8 @@ namespace BGGAPI
             public int CollectionId { get; private set; }
             public string Name { get; private set; }
             public string YearPublished { get; private set; }
-            public string Image { get; private set; }
-            public string Thumbnail { get; private set; }
+            public Uri Image { get; private set; }
+            public Uri Thumbnail { get; private set; }
             public int NumberOfPlays { get; private set; }
 
             public bool Owned { get; private set; }
