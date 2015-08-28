@@ -2,72 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
-using AutoMapper.Mappers;
 
 namespace BGGAPI
 {
     public class BGGThings
     {
-        static BGGThings()
-        {
-            var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
-
-            configuration.CreateMap<BGGThingsObjects.DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGSharedObjects.IntValue, int>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGSharedObjects.FloatValue, float>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGThingsObjects.StringValue, string>().NullSafeConvertUsing(src => src.value);
-
-            configuration.CreateMap<BGGThingsObjects.Item, Item>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
-                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
-                .ForMember(dest => dest.BayesAverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
-                .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => new Uri("http:" + src.Image)))
-                .ForMember(dest => dest.MarketplaceListings, opt => opt.MapFrom(src => src.MarketplaceListings.Listings))
-                .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
-                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median))
-                .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
-                .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
-                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments))
-                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights))
-                .ForMember(dest => dest.PlayingTime, opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
-                .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Statistics.Ratings.Ranks))
-                .ForMember(dest => dest.RatingStandardDeviation, opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev))
-                .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => new Uri("http:" + src.Thumbnail)))
-                .ForMember(dest => dest.UserWhoAreOfferingThisForTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Trading))
-                .ForMember(dest => dest.UsersWhoHaveRatedThis, opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
-                .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist, opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing))
-                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned))
-                .ForMember(dest => dest.UserWhoWantThisInTrade, opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting))
-                .ForMember(dest => dest.Videos, opt => opt.MapFrom(src => src.Videos.Videos));
-            configuration.CreateMap<BGGThingsObjects.Link, Link>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
-            configuration.CreateMap<BGGThingsObjects.Name, Name>();
-            configuration.CreateMap<BGGThingsObjects.Poll, Poll>()
-                .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
-
-            // The explicit casts are necessary here to convince the compiler that the lambda is
-            // returning a nullable type
-            configuration.CreateMap<BGGSharedObjects.Rank, Ranking>()
-                .ForMember(dest => dest.Value, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
-                .ForMember(dest => dest.BayesAverage, opt => opt.ResolveUsing(src => AutomapperHelpers.FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
-            configuration.CreateMap<BGGThingsObjects.Video, Video>()
-                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
-            configuration.CreateMap<BGGThingsObjects.Listing, MarketplaceListing>()
-                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListDate))
-                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
-                .ForMember(dest => dest.CurrencyValue, opt => opt.MapFrom(src => src.Price.value))
-                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link.HRef)))
-                .ForMember(dest => dest.LinkTitle, opt => opt.MapFrom(src => src.Link.Title));
-            configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
-
-            Mapper = new MappingEngine(configuration);
-        }
-
-        public static readonly MappingEngine Mapper;
-
         // ReSharper disable UnusedAutoPropertyAccessor.Local - called via reflection
         public string TermsOfUse { get; private set; }
         public IList<Item> Items { get; private set; }

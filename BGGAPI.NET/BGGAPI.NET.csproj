@@ -50,11 +50,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutomapperExtensions.cs" />
-    <Compile Include="AutomapperHelpers.cs" />
+    <Compile Include="BGGAutomapper.cs" />
     <Compile Include="BGGClient.cs" />
     <Compile Include="BGGCollection.cs" />
     <Compile Include="BGGCollectionObjects.cs" />
     <Compile Include="BGGCollectionRequest.cs" />
+    <Compile Include="BGGFactory.cs" />
     <Compile Include="BGGSharedObjects.cs" />
     <Compile Include="BGGThings.cs" />
     <Compile Include="BGGThingsObjects.cs" />

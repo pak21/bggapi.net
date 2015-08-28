@@ -17,7 +17,7 @@ namespace BGGAPI.NET.Tests
                 value = "Name value"
             };
 
-            var name = BGGThings.Mapper.Map<BGGThings.Name>(rawName);
+            var name = BGGAutomapper.Map<BGGThings.Name>(rawName);
 
             Assert.AreEqual("NameType", name.Type);
             Assert.AreEqual(2, name.SortIndex);
@@ -34,7 +34,7 @@ namespace BGGAPI.NET.Tests
                 TotalVotes = 1234
             };
 
-            var poll = BGGThings.Mapper.Map<BGGThings.Poll>(rawPoll);
+            var poll = BGGAutomapper.Map<BGGThings.Poll>(rawPoll);
 
             Assert.AreEqual("Poll name", poll.Name);
             Assert.AreEqual("Poll title", poll.Title);
@@ -51,7 +51,7 @@ namespace BGGAPI.NET.Tests
                 value = "Link value"
             };
 
-            var link = BGGThings.Mapper.Map<BGGThings.Link>(rawLink);
+            var link = BGGAutomapper.Map<BGGThings.Link>(rawLink);
 
             Assert.AreEqual(1234, link.Id);
             Assert.AreEqual("Link value", link.Name);
@@ -71,7 +71,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "7.77473"
             };
 
-            var ranking = BGGThings.Mapper.Map<BGGThings.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<BGGThings.Ranking>(rawRanking);
 
             Assert.AreEqual("family", ranking.Type);
             Assert.AreEqual(5497, ranking.Id);
@@ -96,7 +96,7 @@ namespace BGGAPI.NET.Tests
                 PostDate = new DateTime(2015, 1, 2, 3, 4, 5)
             };
 
-            var video = BGGThings.Mapper.Map<BGGThings.Video>(rawVideo);
+            var video = BGGAutomapper.Map<BGGThings.Video>(rawVideo);
 
             Assert.AreEqual(1, video.Id);
             Assert.AreEqual("Video title", video.Title);
@@ -128,7 +128,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var listing = BGGThings.Mapper.Map<BGGThings.MarketplaceListing>(rawListing);
+            var listing = BGGAutomapper.Map<BGGThings.MarketplaceListing>(rawListing);
 
             Assert.AreEqual(new DateTime(2014, 6, 7, 8, 9, 10), listing.ListingDate);
             Assert.AreEqual("GBP", listing.Currency);
@@ -152,7 +152,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "Not Ranked"
             };
 
-            var ranking = BGGThings.Mapper.Map<BGGThings.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<BGGThings.Ranking>(rawRanking);
 
             Assert.IsNull(ranking.Value);
             Assert.IsNull(ranking.BayesAverage);
@@ -212,7 +212,7 @@ namespace BGGAPI.NET.Tests
                 YearPublished = new BGGSharedObjects.IntValue { value = 2000 }
             };
 
-            var item = BGGThings.Mapper.Map<BGGThings.Item>(rawItem);
+            var item = BGGAutomapper.Map<BGGThings.Item>(rawItem);
 
             Assert.AreEqual(1, item.Categories.Count);
             Assert.AreEqual("Category1", item.Categories[0].Name);
@@ -268,7 +268,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var item = BGGThings.Mapper.Map<BGGThings.Item>(rawItem);
+            var item = BGGAutomapper.Map<BGGThings.Item>(rawItem);
 
             Assert.AreEqual(9.87f, item.AverageRating);
             Assert.AreEqual(1.23f, item.AverageWeight);
@@ -298,7 +298,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var things = BGGThings.Mapper.Map<BGGThings>(rawThings);
+            var things = BGGAutomapper.Map<BGGThings>(rawThings);
 
             Assert.AreEqual("blah", things.TermsOfUse);
             Assert.AreEqual(2, things.Items.Count);
