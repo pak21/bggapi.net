@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
+
+using System;
 using AutoMapper;
 
 namespace BGGAPI

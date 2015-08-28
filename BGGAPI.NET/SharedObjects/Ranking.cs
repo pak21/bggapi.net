@@ -1,4 +1,6 @@
-﻿namespace BGGAPI.SharedObjects
+﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
+
+namespace BGGAPI.SharedObjects
 {
     public class Ranking
     {

@@ -1,4 +1,6 @@
-﻿using BGGAPI.Raw;
+﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
+
+using BGGAPI.Raw;
 
 namespace BGGAPI
 {
