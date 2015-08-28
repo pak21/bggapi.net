@@ -4,6 +4,6 @@ namespace BGGAPI
 {
     internal class Constants
     {
-        public const string DefaultAPIAddress = "http://www.boardgamegeek.com/xmlapi2/";
+        public const string DefaultApiAddress = "http://www.boardgamegeek.com/xmlapi2/";
     }
 }

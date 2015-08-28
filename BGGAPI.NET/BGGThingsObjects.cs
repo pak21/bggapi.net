@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using BGGAPI.BGGSharedObjects;
 
+// A number of the properties in this class are called "value" rather than "Value" due to a RestSharp issue
+// see https://groups.google.com/forum/#!topic/restsharp/eAqzFFM13ns
+
 namespace BGGAPI.BGGThingsObjects
 {
     public class Things
@@ -53,6 +56,7 @@ namespace BGGAPI.BGGThingsObjects
     {
         public string Type { get; set; }
         public int Id { get; set; }
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public string value { get; set; }
     }
 
@@ -97,17 +101,20 @@ namespace BGGAPI.BGGThingsObjects
 
     public class DateTimeValue
     {
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public DateTime value { get; set; }
     }
 
     public class MoneyValue
     {
         public string Currency { get; set; }
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public float value { get; set; }
     }
 
     public class StringValue
     {
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public string value { get; set; }
     }
 

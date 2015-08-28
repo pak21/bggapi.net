@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using AutoMapper.Mappers;
 
@@ -61,6 +60,7 @@ namespace BGGAPI
 
         public static readonly MappingEngine Mapper;
 
+        // ReSharper disable UnusedAutoPropertyAccessor.Local - called via reflection
         public IList<Item> Items { get; private set; }
         public string TermsOfUse { get; private set; }
 
@@ -110,5 +110,6 @@ namespace BGGAPI
             public int? Position { get; private set; }
             public float? BayesianAverageRating { get; private set; }
         }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
     }
 }

@@ -2,22 +2,27 @@
 
 using System.Collections.Generic;
 
+// A number of the properties in this class are called "value" rather than "Value" due to a RestSharp issue
+// see https://groups.google.com/forum/#!topic/restsharp/eAqzFFM13ns
+
 namespace BGGAPI.BGGSharedObjects
 {
     public class IntValue
     {
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public int value { get; set; }
     }
 
     public class FloatValue
     {
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public float value { get; set; }
     }
 
     public class Ratings
     {
-        // Doesn't work if this is called "Value" - see https://groups.google.com/forum/#!topic/restsharp/eAqzFFM13ns
         // This can return "N/A" so needs to be a string rather than an integer
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public string value { get; set; }
 
         public IntValue UsersRated { get; set; }
@@ -42,6 +47,7 @@ namespace BGGAPI.BGGSharedObjects
         public string Name { get; set; }
         public string FriendlyName { get; set; }
         // This can return "Not Ranked" so needs to be a string rather than an integer
+        // ReSharper disable once InconsistentNaming - RestSharp issue
         public string value { get; set; }
         // This can return "Not Ranked" so needs to be a string rather than an integer
         public string BayesAverage { get; set; }

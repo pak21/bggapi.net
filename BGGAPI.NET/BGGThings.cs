@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using AutoMapper;
 using AutoMapper.Mappers;
 
@@ -69,6 +68,7 @@ namespace BGGAPI
 
         public static readonly MappingEngine Mapper;
 
+        // ReSharper disable UnusedAutoPropertyAccessor.Local - called via reflection
         public string TermsOfUse { get; private set; }
         public IList<Item> Items { get; private set; }
 
@@ -119,6 +119,7 @@ namespace BGGAPI
 
         public class Poll
         {
+            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Name" from within this class
             public string Name { get; private set; }
             public string Title { get; private set; }
             public int Votes { get; private set; }
@@ -128,6 +129,7 @@ namespace BGGAPI
         {
             public string Type { get; private set; }
             public int Id { get; private set; }
+            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Name" from within this class
             public string Name { get; private set; }
         }
 
@@ -135,6 +137,7 @@ namespace BGGAPI
         {
             public string Type { get; private set; }
             public int Id { get; private set; }
+            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Name" from within this class
             public string Name { get; private set; }
             public string FriendlyName { get; private set; }
             public int? Value { get; private set; }
@@ -147,6 +150,7 @@ namespace BGGAPI
             public string Title { get; private set; }
             public string Category { get; private set; }
             public string Language { get; private set; }
+            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Link" from within this class
             public Uri Link { get; private set; }
             public string Username { get; private set; }
             public int UserId { get; private set; }
@@ -160,8 +164,10 @@ namespace BGGAPI
             public float CurrencyValue { get; private set; }
             public string Condition { get; private set; }
             public string Notes { get; private set; }
+            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Link" from within this class
             public Uri Link { get; private set; }
             public string LinkTitle { get; private set; }
         }
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
     }
 }

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BGGAPI.BGGCollectionObjects;
 using RestSharp;
-using RestSharp.Deserializers;
 using BGGAPI.BGGThingsObjects;
 
 namespace BGGAPI
@@ -15,17 +14,9 @@ namespace BGGAPI
     /// </summary>
     public class BGGClient
     {
-        /// <summary>
-        /// Constructs a BoardGameGeek API client
-        /// </summary>
-        public BGGClient()
-        {
-        }
-
         private T CallBGG<T>(string resource, object request) where T : new()
         {
-            var client = new RestClient();
-            client.BaseUrl = Constants.DefaultAPIAddress;
+            var client = new RestClient {BaseUrl = Constants.DefaultAPIAddress};
 
             var restRequest = new RestRequest { Resource = resource };
             foreach (var parameter in SerializeRequest(request))
@@ -70,7 +61,7 @@ namespace BGGAPI
         private const string ZeroString = "0";
         private const string OneString = "1";
 
-        private static IDictionary<Type, Func<object, string>> TypeSerializers =
+        private static readonly IDictionary<Type, Func<object, string>> TypeSerializers =
             new Dictionary<Type, Func<object, string>>
                 {
                     { typeof(bool), o => (bool)o ? OneString : null },
@@ -81,8 +72,9 @@ namespace BGGAPI
                     { typeof(List<int>), o => string.Join(",", (List<int>)o) },
                 };
 
-        private static Func<object, string> DefaultSerializer = o => o.ToString();
+        private static readonly Func<object, string> DefaultSerializer = o => o.ToString();
 
+        // ReSharper disable once ReturnTypeCanBeEnumerable.Local - clearer as a Dictionary
         private IDictionary<string, string> SerializeRequest(object request)
         {
             var parameters = new Dictionary<string, string>();
@@ -92,7 +84,7 @@ namespace BGGAPI
                 var value = propertyInfo.GetValue(request);
                 if (value != null)
                 {
-                    Func<object, string> serializer = null;
+                    Func<object, string> serializer;
 
                     var propertyType = propertyInfo.PropertyType;
                     if (!TypeSerializers.TryGetValue(propertyType, out serializer))
