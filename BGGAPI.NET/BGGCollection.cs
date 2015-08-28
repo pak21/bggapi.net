@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using BGGAPI.SharedObjects;
 
 namespace BGGAPI
 {
@@ -46,16 +47,6 @@ namespace BGGAPI
             public int Median { get; private set; }
 
             public IList<Ranking> Rankings { get; set; }
-        }
-
-        public class Ranking
-        {
-            public string Type { get; private set; }
-            public int IdWithinType { get; private set; }
-            public string Name { get; private set; }
-            public string FriendlyName { get; private set; }
-            public int? Position { get; private set; }
-            public float? BayesianAverageRating { get; private set; }
         }
         // ReSharper restore UnusedAutoPropertyAccessor.Local
     }

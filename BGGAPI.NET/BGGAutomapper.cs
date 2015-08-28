@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using AutoMapper.Mappers;
 using BGGAPI.Raw;
+using BGGAPI.SharedObjects;
 
 namespace BGGAPI
 {
@@ -12,25 +13,29 @@ namespace BGGAPI
         {
             var configuration = new ConfigurationStore(new TypeMapFactory(), MapperRegistry.Mappers);
 
+            CreateSharedMappings(configuration);
             CreateCollectionMappings(configuration);
             CreateThingsMappings(configuration);
 
             Mapper = new MappingEngine(configuration);
         }
 
-        private static void CreateCollectionMappings(ConfigurationStore configuration)
+        private static void CreateSharedMappings(ConfigurationStore configuration)
         {
-            configuration.CreateMap<Rank, BGGCollection.Ranking>()
+            configuration.CreateMap<Rank, Ranking>()
                 .ForMember(dest => dest.IdWithinType, opt => opt.MapFrom(src => src.Id))
                 // The explicit casts are necessary here to convince the compiler that the lambda is
                 // returning a nullable type
                 .ForMember(dest => dest.Position,
-                    opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?) int.Parse(s.value))))
+                    opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?)int.Parse(s.value))))
                 .ForMember(dest => dest.BayesianAverageRating,
                     opt =>
                         opt.ResolveUsing(
-                            src => FormatExceptionSafeMapping(src, s => (float?) float.Parse(s.BayesAverage))));
+                            src => FormatExceptionSafeMapping(src, s => (float?)float.Parse(s.BayesAverage))));
+        }
 
+        private static void CreateCollectionMappings(ConfigurationStore configuration)
+        {
             configuration.CreateMap<CollectionItem, BGGCollection.Item>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ObjectType))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
@@ -117,16 +122,6 @@ namespace BGGAPI
             configuration.CreateMap<Name, BGGThings.Name>();
             configuration.CreateMap<Poll, BGGThings.Poll>()
                 .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
-
-            // The explicit casts are necessary here to convince the compiler that the lambda is
-            // returning a nullable type
-            configuration.CreateMap<Rank, BGGThings.Ranking>()
-                .ForMember(dest => dest.Value,
-                    opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?) int.Parse(s.value))))
-                .ForMember(dest => dest.BayesAverage,
-                    opt =>
-                        opt.ResolveUsing(
-                            src => FormatExceptionSafeMapping(src, s => (float?) float.Parse(s.BayesAverage))));
             configuration.CreateMap<Video, BGGThings.Video>()
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
             configuration.CreateMap<Listing, BGGThings.MarketplaceListing>()

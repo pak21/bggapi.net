@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BGGAPI.Raw;
+using BGGAPI.SharedObjects;
 using NUnit.Framework;
 
 namespace BGGAPI.NET.Tests
@@ -72,14 +73,14 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "7.77473"
             };
 
-            var ranking = BGGAutomapper.Map<BGGThings.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
 
             Assert.AreEqual("family", ranking.Type);
-            Assert.AreEqual(5497, ranking.Id);
+            Assert.AreEqual(5497, ranking.IdWithinType);
             Assert.AreEqual("strategygames", ranking.Name);
             Assert.AreEqual("Strategy Game Rank", ranking.FriendlyName);
-            Assert.AreEqual(15, ranking.Value);
-            Assert.AreEqual(7.77473f, ranking.BayesAverage);
+            Assert.AreEqual(15, ranking.Position);
+            Assert.AreEqual(7.77473f, ranking.BayesianAverageRating);
         }
 
         [Test]
@@ -153,10 +154,10 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "Not Ranked"
             };
 
-            var ranking = BGGAutomapper.Map<BGGThings.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
 
-            Assert.IsNull(ranking.Value);
-            Assert.IsNull(ranking.BayesAverage);
+            Assert.IsNull(ranking.Position);
+            Assert.IsNull(ranking.BayesianAverageRating);
         }
 
         [Test]
@@ -278,7 +279,7 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(6, item.NumberOfComments);
             Assert.AreEqual(7, item.NumberOfWeights);
             Assert.AreEqual(1, item.Rankings.Count);
-            Assert.AreEqual(2, item.Rankings[0].Id);
+            Assert.AreEqual(2, item.Rankings[0].IdWithinType);
             Assert.AreEqual(3.21f, item.RatingStandardDeviation);
             Assert.AreEqual(3, item.UserWhoAreOfferingThisForTrade);
             Assert.AreEqual(1, item.UsersWhoHaveRatedThis);

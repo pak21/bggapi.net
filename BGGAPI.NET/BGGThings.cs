@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using BGGAPI.SharedObjects;
 
 namespace BGGAPI
 {
@@ -70,17 +71,6 @@ namespace BGGAPI
             public int Id { get; private set; }
             // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Name" from within this class
             public string Name { get; private set; }
-        }
-
-        public class Ranking
-        {
-            public string Type { get; private set; }
-            public int Id { get; private set; }
-            // ReSharper disable once MemberHidesStaticFromOuterClass - not going to be referencing the class "Name" from within this class
-            public string Name { get; private set; }
-            public string FriendlyName { get; private set; }
-            public int? Value { get; private set; }
-            public float? BayesAverage { get; private set; }
         }
 
         public class Video

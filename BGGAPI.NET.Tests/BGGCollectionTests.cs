@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BGGAPI.Raw;
+using BGGAPI.SharedObjects;
 using NUnit.Framework;
 
 namespace BGGAPI.NET.Tests
@@ -21,7 +22,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "7.77473"
             };
 
-            var ranking = BGGAutomapper.Map<BGGCollection.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
 
             Assert.AreEqual("family", ranking.Type);
             Assert.AreEqual(5497, ranking.IdWithinType);
@@ -44,7 +45,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "Not Ranked"
             };
 
-            var ranking = BGGAutomapper.Map<BGGCollection.Ranking>(rawRanking);
+            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
 
             Assert.IsNull(ranking.Position);
             Assert.IsNull(ranking.BayesianAverageRating);
