@@ -53,12 +53,12 @@
     <Compile Include="BGGAutomapper.cs" />
     <Compile Include="BGGClient.cs" />
     <Compile Include="BGGCollection.cs" />
-    <Compile Include="BGGCollectionObjects.cs" />
+    <Compile Include="Raw\Collection.cs" />
     <Compile Include="BGGCollectionRequest.cs" />
     <Compile Include="BGGFactory.cs" />
-    <Compile Include="BGGSharedObjects.cs" />
+    <Compile Include="Raw\Shared.cs" />
     <Compile Include="BGGThings.cs" />
-    <Compile Include="BGGThingsObjects.cs" />
+    <Compile Include="Raw\Things.cs" />
     <Compile Include="BGGThingsRequest.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

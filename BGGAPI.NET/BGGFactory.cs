@@ -1,5 +1,4 @@
-﻿using BGGAPI.BGGCollectionObjects;
-using BGGAPI.BGGThingsObjects;
+﻿using BGGAPI.Raw;
 
 namespace BGGAPI
 {

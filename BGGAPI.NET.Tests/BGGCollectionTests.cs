@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BGGAPI.BGGCollectionObjects;
-using BGGAPI.BGGSharedObjects;
+using BGGAPI.Raw;
 using NUnit.Framework;
 
 namespace BGGAPI.NET.Tests
@@ -12,7 +11,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestRankingConversion()
         {
-            var rawRanking = new BGGSharedObjects.Rank
+            var rawRanking = new Rank
             {
                 Type = "family",
                 Id = 5497,
@@ -35,7 +34,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestRankingConversion_NotRanked()
         {
-            var rawRanking = new BGGSharedObjects.Rank
+            var rawRanking = new Rank
             {
                 Type = "family",
                 Id = 5497,
@@ -54,7 +53,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestItemConversion()
         {
-            var rawItem = new Item
+            var rawItem = new CollectionItem
             {
                 ObjectType = "thing",
                 ObjectId = 1,
@@ -150,7 +149,7 @@ namespace BGGAPI.NET.Tests
             var rawCollection = new Collection
             {
                 TermsOfUse = "blah",
-                Items = new List<Item>
+                Items = new List<CollectionItem>
                 {
                     NullItemFactory(123), NullItemFactory(456)
                 }
@@ -163,9 +162,9 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(123, collection.Items[0].Id);
         }
 
-        private static Item NullItemFactory(int id)
+        private static CollectionItem NullItemFactory(int id)
         {
-            return new Item
+            return new CollectionItem
             {
                 ObjectId = id,
                 Status = new Status(),

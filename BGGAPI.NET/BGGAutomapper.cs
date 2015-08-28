@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using AutoMapper.Mappers;
+using BGGAPI.Raw;
 
 namespace BGGAPI
 {
@@ -19,7 +20,7 @@ namespace BGGAPI
 
         private static void CreateCollectionMappings(ConfigurationStore configuration)
         {
-            configuration.CreateMap<BGGSharedObjects.Rank, BGGCollection.Ranking>()
+            configuration.CreateMap<Rank, BGGCollection.Ranking>()
                 .ForMember(dest => dest.IdWithinType, opt => opt.MapFrom(src => src.Id))
                 // The explicit casts are necessary here to convince the compiler that the lambda is
                 // returning a nullable type
@@ -30,7 +31,7 @@ namespace BGGAPI
                         opt.ResolveUsing(
                             src => FormatExceptionSafeMapping(src, s => (float?) float.Parse(s.BayesAverage))));
 
-            configuration.CreateMap<BGGCollectionObjects.Item, BGGCollection.Item>()
+            configuration.CreateMap<CollectionItem, BGGCollection.Item>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ObjectType))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
                 .ForMember(dest => dest.CollectionId, opt => opt.MapFrom(src => src.CollId))
@@ -70,17 +71,17 @@ namespace BGGAPI
                 .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Stats.Rating.Median.value))
                 .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Stats.Rating.Ranks));
 
-            configuration.CreateMap<BGGCollectionObjects.Collection, BGGCollection>();
+            configuration.CreateMap<Collection, BGGCollection>();
         }
 
         private static void CreateThingsMappings(ConfigurationStore configuration)
         {
-            configuration.CreateMap<BGGThingsObjects.DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGSharedObjects.IntValue, int>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGSharedObjects.FloatValue, float>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<BGGThingsObjects.StringValue, string>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<IntValue, int>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<FloatValue, float>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<StringValue, string>().NullSafeConvertUsing(src => src.value);
 
-            configuration.CreateMap<BGGThingsObjects.Item, BGGThings.Item>()
+            configuration.CreateMap<ThingsItem, BGGThings.Item>()
                 .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
                 .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
                 .ForMember(dest => dest.BayesAverageRating,
@@ -111,30 +112,30 @@ namespace BGGAPI
                 .ForMember(dest => dest.UserWhoWantThisInTrade,
                     opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting))
                 .ForMember(dest => dest.Videos, opt => opt.MapFrom(src => src.Videos.Videos));
-            configuration.CreateMap<BGGThingsObjects.Link, BGGThings.Link>()
+            configuration.CreateMap<Link, BGGThings.Link>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
-            configuration.CreateMap<BGGThingsObjects.Name, BGGThings.Name>();
-            configuration.CreateMap<BGGThingsObjects.Poll, BGGThings.Poll>()
+            configuration.CreateMap<Name, BGGThings.Name>();
+            configuration.CreateMap<Poll, BGGThings.Poll>()
                 .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
 
             // The explicit casts are necessary here to convince the compiler that the lambda is
             // returning a nullable type
-            configuration.CreateMap<BGGSharedObjects.Rank, BGGThings.Ranking>()
+            configuration.CreateMap<Rank, BGGThings.Ranking>()
                 .ForMember(dest => dest.Value,
                     opt => opt.ResolveUsing(src => FormatExceptionSafeMapping(src, s => (int?) int.Parse(s.value))))
                 .ForMember(dest => dest.BayesAverage,
                     opt =>
                         opt.ResolveUsing(
                             src => FormatExceptionSafeMapping(src, s => (float?) float.Parse(s.BayesAverage))));
-            configuration.CreateMap<BGGThingsObjects.Video, BGGThings.Video>()
+            configuration.CreateMap<Video, BGGThings.Video>()
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
-            configuration.CreateMap<BGGThingsObjects.Listing, BGGThings.MarketplaceListing>()
+            configuration.CreateMap<Listing, BGGThings.MarketplaceListing>()
                 .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListDate))
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
                 .ForMember(dest => dest.CurrencyValue, opt => opt.MapFrom(src => src.Price.value))
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link.HRef)))
                 .ForMember(dest => dest.LinkTitle, opt => opt.MapFrom(src => src.Link.Title));
-            configuration.CreateMap<BGGThingsObjects.Things, BGGThings>();
+            configuration.CreateMap<Things, BGGThings>();
         }
 
         private static readonly MappingEngine Mapper;

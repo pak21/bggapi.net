@@ -3,8 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BGGAPI.BGGCollectionObjects;
-using BGGAPI.BGGThingsObjects;
+using BGGAPI.Raw;
 using RestSharp;
 
 namespace BGGAPI

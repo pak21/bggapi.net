@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BGGAPI.Raw;
 using NUnit.Framework;
 
 namespace BGGAPI.NET.Tests
@@ -10,7 +11,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestNameConversion()
         {
-            var rawName = new BGGThingsObjects.Name
+            var rawName = new Name
             {
                 Type = "NameType",
                 SortIndex = 2,
@@ -27,7 +28,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestPollConversion()
         {
-            var rawPoll = new BGGThingsObjects.Poll
+            var rawPoll = new Poll
             {
                 Name = "Poll name",
                 Title = "Poll title",
@@ -44,7 +45,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestLinkConversion()
         {
-            var rawLink = new BGGThingsObjects.Link
+            var rawLink = new Link
             {
                 Id = 1234,
                 Type = "Link type",
@@ -61,7 +62,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestRankingConversion()
         {
-            var rawRanking = new BGGSharedObjects.Rank
+            var rawRanking = new Rank
             {
                 Type = "family",
                 Id = 5497,
@@ -84,7 +85,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestVideoConversion()
         {
-            var rawVideo = new BGGThingsObjects.Video
+            var rawVideo = new Video
             {
                 Id = 1,
                 Title = "Video title",
@@ -111,17 +112,17 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestListingConversion()
         {
-            var rawListing = new BGGThingsObjects.Listing
+            var rawListing = new Listing
             {
-                ListDate = new BGGThingsObjects.DateTimeValue { value = new DateTime(2014, 6, 7, 8, 9, 10) },
-                Price = new BGGThingsObjects.MoneyValue
+                ListDate = new DateTimeValue { value = new DateTime(2014, 6, 7, 8, 9, 10) },
+                Price = new MoneyValue
                 {
                     Currency = "GBP",
                     value = 12.34f
                 },
-                Condition = new BGGThingsObjects.StringValue { value = "Mint" },
-                Notes = new BGGThingsObjects.StringValue { value = "Really mint" },
-                Link = new BGGThingsObjects.LinkValue
+                Condition = new StringValue { value = "Mint" },
+                Notes = new StringValue { value = "Really mint" },
+                Link = new LinkValue
                 {
                     HRef = "http://www.example.com/",
                     Title = "Example link"
@@ -142,7 +143,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestRankingConversion_NotRanked()
         {
-            var rawRanking = new BGGSharedObjects.Rank
+            var rawRanking = new Rank
             {
                 Type = "family",
                 Id = 5497,
@@ -161,55 +162,55 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestItemConversion()
         {
-            var rawItem = new BGGThingsObjects.Item()
+            var rawItem = new ThingsItem()
             {
                 Description = "Item description",
                 Id = 1234,
                 Image = "//www.example.com/image.jpeg",
-                Links = new List<BGGThingsObjects.Link>
+                Links = new List<Link>
                 {
-                    new BGGThingsObjects.Link { Type = "boardgamecategory", value = "Category1" },
-                    new BGGThingsObjects.Link { Type = "foo", value = "bar" },
+                    new Link { Type = "boardgamecategory", value = "Category1" },
+                    new Link { Type = "foo", value = "bar" },
                 },
-                MarketplaceListings = new BGGThingsObjects.MarketplaceListings
+                MarketplaceListings = new MarketplaceListings
                 {
-                    Listings = new List<BGGThingsObjects.Listing>
+                    Listings = new List<Listing>
                     {
-                        new BGGThingsObjects.Listing
+                        new Listing
                         {
-                            Condition = new BGGThingsObjects.StringValue { value = "Bashed" }
+                            Condition = new StringValue { value = "Bashed" }
                         }
                     }
                 },
-                MaxPlayers = new BGGSharedObjects.IntValue { value = 4 },
-                MinAge = new BGGSharedObjects.IntValue { value = 18 },
-                MinPlayers = new BGGSharedObjects.IntValue { value = 1 },
-                Names = new List<BGGThingsObjects.Name>
+                MaxPlayers = new IntValue { value = 4 },
+                MinAge = new IntValue { value = 18 },
+                MinPlayers = new IntValue { value = 1 },
+                Names = new List<Name>
                 {
-                    new BGGThingsObjects.Name { value = "A" },
-                    new BGGThingsObjects.Name { value = "B" }
+                    new Name { value = "A" },
+                    new Name { value = "B" }
                 },
-                PlayingTime = new BGGSharedObjects.IntValue { value = 60 },
-                Polls = new List<BGGThingsObjects.Poll> {
-                    new BGGThingsObjects.Poll { Name = "C" },
-                    new BGGThingsObjects.Poll { Name = "D" },
-                    new BGGThingsObjects.Poll { Name = "E" }
+                PlayingTime = new IntValue { value = 60 },
+                Polls = new List<Poll> {
+                    new Poll { Name = "C" },
+                    new Poll { Name = "D" },
+                    new Poll { Name = "E" }
                 },
                 Thumbnail = "//www.example.com/thumbnail.jpeg",
                 Type = "Item type",
-                Videos = new BGGThingsObjects.VideosList
+                Videos = new VideosList
                 {
                     Total = 3,
-                    Videos = new List<BGGThingsObjects.Video>
+                    Videos = new List<Video>
                     {
-                        new BGGThingsObjects.Video
+                        new Video
                         {
                             Id = 7,
                             Link = "http://www.example.com/"
                         }
                     }
                 },
-                YearPublished = new BGGSharedObjects.IntValue { value = 2000 }
+                YearPublished = new IntValue { value = 2000 }
             };
 
             var item = BGGAutomapper.Map<BGGThings.Item>(rawItem);
@@ -242,29 +243,29 @@ namespace BGGAPI.NET.Tests
         public void TestStatisticsConversion()
         {
             var rawItem = NullItemFactory(123);
-            rawItem.Statistics = new BGGThingsObjects.Statistics
+            rawItem.Statistics = new Statistics
             {
-                Ratings = new BGGSharedObjects.Ratings
+                Ratings = new Ratings
                 {
-                    Average = new BGGSharedObjects.FloatValue { value = 9.87f },
-                    AverageWeight = new BGGSharedObjects.FloatValue { value = 1.23f },
-                    BayesAverage = new BGGSharedObjects.FloatValue { value = 6.54f },
-                    Median = new BGGSharedObjects.IntValue { value = 8 },
-                    NumComments = new BGGSharedObjects.IntValue { value = 6 },
-                    NumWeights = new BGGSharedObjects.IntValue { value = 7 },
-                    Owned = new BGGSharedObjects.IntValue { value = 2 },
-                    Ranks = new List<BGGSharedObjects.Rank>
+                    Average = new FloatValue { value = 9.87f },
+                    AverageWeight = new FloatValue { value = 1.23f },
+                    BayesAverage = new FloatValue { value = 6.54f },
+                    Median = new IntValue { value = 8 },
+                    NumComments = new IntValue { value = 6 },
+                    NumWeights = new IntValue { value = 7 },
+                    Owned = new IntValue { value = 2 },
+                    Ranks = new List<Rank>
                     {
-                        new BGGSharedObjects.Rank
+                        new Rank
                         {
                             Type = "Type1", Id = 2, Name = "Name1", FriendlyName = "FriendlyName1", value = "3", BayesAverage = "4"
                         }
                     },
-                    StdDev = new BGGSharedObjects.FloatValue { value = 3.21f },
-                    Trading = new BGGSharedObjects.IntValue { value = 3 },
-                    UsersRated = new BGGSharedObjects.IntValue { value = 1 },
-                    Wanting = new BGGSharedObjects.IntValue { value = 4 },
-                    Wishing = new BGGSharedObjects.IntValue { value = 5 }
+                    StdDev = new FloatValue { value = 3.21f },
+                    Trading = new IntValue { value = 3 },
+                    UsersRated = new IntValue { value = 1 },
+                    Wanting = new IntValue { value = 4 },
+                    Wishing = new IntValue { value = 5 }
                 }
             };
 
@@ -289,10 +290,10 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestThingsConversion()
         {
-            var rawThings = new BGGThingsObjects.Things
+            var rawThings = new Things
             {
                 TermsOfUse = "blah",
-                Items = new List<BGGThingsObjects.Item>
+                Items = new List<ThingsItem>
                 {
                     NullItemFactory(123), NullItemFactory(456)
                 }
@@ -305,18 +306,18 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(123, things.Items[0].Id);
         }
 
-        private static BGGThingsObjects.Item NullItemFactory(int id)
+        private static ThingsItem NullItemFactory(int id)
         {
-            return new BGGThingsObjects.Item
+            return new ThingsItem
             {
                 Id = id,
                 Image = "//localhost",
-                Links = new List<BGGThingsObjects.Link>(),
-                MaxPlayers = new BGGSharedObjects.IntValue(),
-                MinAge = new BGGSharedObjects.IntValue(),
-                MinPlayers = new BGGSharedObjects.IntValue(),
+                Links = new List<Link>(),
+                MaxPlayers = new IntValue(),
+                MinAge = new IntValue(),
+                MinPlayers = new IntValue(),
                 Thumbnail = "//localhost",
-                YearPublished = new BGGSharedObjects.IntValue()
+                YearPublished = new IntValue()
             };
         }
     }
