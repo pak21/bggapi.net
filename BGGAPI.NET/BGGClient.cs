@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BGGAPI.BGGCollectionObjects;
-using RestSharp;
 using BGGAPI.BGGThingsObjects;
+using RestSharp;
 
 namespace BGGAPI
 {
@@ -41,7 +41,7 @@ namespace BGGAPI
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
             var rawCollection = CallBGG<Collection>("collection", collectionRequest);
-            return BGGCollection.Mapper.Map<BGGCollection>(rawCollection);
+            return BGGFactory.CreateCollection(rawCollection);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace BGGAPI
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
             var rawThings = CallBGG<Things>("thing", thingsRequest);
-            return BGGThings.Mapper.Map<BGGThings>(rawThings);
+            return BGGFactory.CreateThings(rawThings);
         }
 
         private const string ZeroString = "0";
