@@ -16,7 +16,7 @@ namespace BGGAPI
     {
         private T CallBGG<T>(string resource, object request) where T : new()
         {
-            var client = new RestClient {BaseUrl = Constants.DefaultAPIAddress};
+            var client = new RestClient {BaseUrl = Constants.DefaultApiAddress};
 
             var restRequest = new RestRequest { Resource = resource };
             foreach (var parameter in SerializeRequest(request))
@@ -72,10 +72,8 @@ namespace BGGAPI
                     { typeof(List<int>), o => string.Join(",", (List<int>)o) },
                 };
 
-        private static readonly Func<object, string> DefaultSerializer = o => o.ToString();
-
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local - clearer as a Dictionary
-        private IDictionary<string, string> SerializeRequest(object request)
+        private static IDictionary<string, string> SerializeRequest(object request)
         {
             var parameters = new Dictionary<string, string>();
 
@@ -97,10 +95,7 @@ namespace BGGAPI
                         }
                     }
 
-                    if (serializer == null)
-                        serializer = DefaultSerializer;
-
-                    var serializedValue = serializer(value);
+                    var serializedValue = serializer == null ? value.ToString() : serializer(value);
                     if (serializedValue != null)
                         parameters.Add(propertyInfo.Name.ToLower(), serializedValue);
                 }
