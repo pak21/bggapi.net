@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
 
+using System;
+
 namespace BGGAPI
 {
     internal class Constants
     {
-        public const string DefaultApiAddress = "http://www.boardgamegeek.com/xmlapi2/";
+        public static readonly Uri DefaultApiAddress = new Uri("http://www.boardgamegeek.com/xmlapi2/");
     }
 }

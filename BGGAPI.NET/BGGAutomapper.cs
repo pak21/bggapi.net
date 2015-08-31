@@ -91,35 +91,35 @@ namespace BGGAPI
             configuration.CreateMap<StringValue, string>().NullSafeConvertUsing(src => src.value);
 
             configuration.CreateMap<Raw.Things.Item, BGGThings.Item>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
-                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
+                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average.value))
+                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight.value))
                 .ForMember(dest => dest.BayesAverageRating,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage.value))
                 .ForMember(dest => dest.Categories,
                     opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => new Uri("http:" + src.Image)))
                 .ForMember(dest => dest.MarketplaceListings, opt => opt.MapFrom(src => src.MarketplaceListings.Listings))
                 .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
-                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median))
+                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median.value))
                 .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
                 .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
-                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments))
-                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights))
+                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments.value))
+                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights.value))
                 .ForMember(dest => dest.PlayingTime,
                     opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
                 .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Statistics.Ratings.Ranks))
                 .ForMember(dest => dest.RatingStandardDeviation,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev.value))
                 .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => new Uri("http:" + src.Thumbnail)))
                 .ForMember(dest => dest.UserWhoAreOfferingThisForTrade,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Trading))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.Trading.value))
                 .ForMember(dest => dest.UsersWhoHaveRatedThis,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated.value))
                 .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing))
-                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing.value))
+                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned.value))
                 .ForMember(dest => dest.UserWhoWantThisInTrade,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting))
+                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting.value))
                 .ForMember(dest => dest.Videos, opt => opt.MapFrom(src => src.Videos.Videos));
             configuration.CreateMap<Link, BGGThings.Link>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
