@@ -1,8 +1,5 @@
 ﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using BGGAPI;
 
 namespace TestApp
@@ -13,8 +10,8 @@ namespace TestApp
         {
             var client = new BGGClient();
 
-            var x = new BGGCollectionRequest { Username = "pak21" };
-            var y = client.GetCollection(x);
+            var request = new BGGCollectionRequest {Username = "pak21"};
+            var response = client.GetCollection(request);
         }
     }
 }

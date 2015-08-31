@@ -15,7 +15,7 @@ namespace BGGAPI
     /// </summary>
     public class BGGClient
     {
-        private T CallBGG<T>(string resource, object request) where T : new()
+        private static IRestResponse<T> CallBGG<T>(string resource, object request) where T : new()
         {
             var client = new RestClient {BaseUrl = Constants.DefaultApiAddress};
 
@@ -28,7 +28,7 @@ namespace BGGAPI
             {
                 throw response.ErrorException;
             }
-            return response.Data;
+            return response;
         }
 
         /// <summary>
@@ -36,13 +36,14 @@ namespace BGGAPI
         /// </summary>
         /// <param name="collectionRequest">Details of the request</param>
         /// <returns>Details of the user's collection</returns>
-        public BGGCollection GetCollection(BGGCollectionRequest collectionRequest)
+        public BGGResponse<BGGCollection> GetCollection(BGGCollectionRequest collectionRequest)
         {
             if (string.IsNullOrEmpty(collectionRequest.Username))
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
-            var rawCollection = CallBGG<Collection>("collection", collectionRequest);
-            return BGGFactory.CreateCollection(rawCollection);
+            var response = CallBGG<Collection>("collection", collectionRequest);
+            var collection = BGGFactory.CreateCollection(response.Data);
+            return new BGGResponse<BGGCollection>(response.StatusCode, collection);
         }
 
         /// <summary>
@@ -50,13 +51,14 @@ namespace BGGAPI
         /// </summary>
         /// <param name="thingsRequest">Details of the request</param>
         /// <returns>Details on the requested objects</returns>
-        public BGGThings GetThings(BGGThingsRequest thingsRequest)
+        public BGGResponse<BGGThings> GetThings(BGGThingsRequest thingsRequest)
         {
             if (thingsRequest.Id == null || !thingsRequest.Id.Any())
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
-            var rawThings = CallBGG<Things>("thing", thingsRequest);
-            return BGGFactory.CreateThings(rawThings);
+            var response = CallBGG<Things>("thing", thingsRequest);
+            var things = BGGFactory.CreateThings(response.Data);
+            return new BGGResponse<BGGThings>(response.StatusCode, things);
         }
 
         private const string ZeroString = "0";

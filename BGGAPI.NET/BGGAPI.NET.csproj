@@ -53,6 +53,7 @@
     <Compile Include="BGGAutomapper.cs" />
     <Compile Include="BGGClient.cs" />
     <Compile Include="BGGCollection.cs" />
+    <Compile Include="BGGResponse.cs" />
     <Compile Include="Raw\Collection\Collection.cs" />
     <Compile Include="BGGCollectionRequest.cs" />
     <Compile Include="BGGFactory.cs" />
