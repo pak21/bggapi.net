@@ -13,8 +13,8 @@ namespace TestApp
         {
             var client = new BGGClient();
 
-            var thingsRequest = new BGGThingsRequest { Id = new List<int> {68448}, Stats = true };
-            var things = client.GetThings(thingsRequest);
+            var x = new BGGCollectionRequest { Username = "pak21" };
+            var y = client.GetCollection(x);
         }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using BGGAPI.Raw;
+using BGGAPI.Raw.Collection;
 using BGGAPI.SharedObjects;
 using NUnit.Framework;
 
@@ -56,7 +57,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestItemConversion()
         {
-            var rawItem = new CollectionItem
+            var rawItem = new Item
             {
                 ObjectType = "thing",
                 ObjectId = 1,
@@ -152,7 +153,7 @@ namespace BGGAPI.NET.Tests
             var rawCollection = new Collection
             {
                 TermsOfUse = "blah",
-                Items = new List<CollectionItem>
+                Items = new List<Item>
                 {
                     NullItemFactory(123), NullItemFactory(456)
                 }
@@ -165,9 +166,9 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(123, collection.Items[0].Id);
         }
 
-        private static CollectionItem NullItemFactory(int id)
+        private static Item NullItemFactory(int id)
         {
-            return new CollectionItem
+            return new Item
             {
                 ObjectId = id,
                 Status = new Status(),

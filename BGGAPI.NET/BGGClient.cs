@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BGGAPI.Raw;
+using BGGAPI.Raw.Collection;
+using BGGAPI.Raw.Things;
 using RestSharp;
 
 namespace BGGAPI

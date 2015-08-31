@@ -6,15 +6,15 @@ using System.Collections.Generic;
 // A number of the properties in this class are called "value" rather than "Value" due to a RestSharp issue
 // see https://groups.google.com/forum/#!topic/restsharp/eAqzFFM13ns
 
-namespace BGGAPI.Raw
+namespace BGGAPI.Raw.Things
 {
     public class Things
     {
         public string TermsOfUse { get; set; }
-        public List<ThingsItem> Items { get; set; }
+        public List<Item> Items { get; set; }
     }
 
-    public class ThingsItem
+    public class Item
     {
         public string Type { get; set; }
         public int Id { get; set; }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using BGGAPI.Raw;
+using BGGAPI.Raw.Things;
 using BGGAPI.SharedObjects;
 using NUnit.Framework;
 
@@ -165,7 +166,7 @@ namespace BGGAPI.NET.Tests
         [Test]
         public void TestItemConversion()
         {
-            var rawItem = new ThingsItem()
+            var rawItem = new Item()
             {
                 Description = "Item description",
                 Id = 1234,
@@ -296,7 +297,7 @@ namespace BGGAPI.NET.Tests
             var rawThings = new Things
             {
                 TermsOfUse = "blah",
-                Items = new List<ThingsItem>
+                Items = new List<Item>
                 {
                     NullItemFactory(123), NullItemFactory(456)
                 }
@@ -309,9 +310,9 @@ namespace BGGAPI.NET.Tests
             Assert.AreEqual(123, things.Items[0].Id);
         }
 
-        private static ThingsItem NullItemFactory(int id)
+        private static Item NullItemFactory(int id)
         {
-            return new ThingsItem
+            return new Item
             {
                 Id = id,
                 Image = "//localhost",

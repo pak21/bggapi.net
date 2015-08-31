@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Philip Kendall. See LICENSE.txt for more details.
 
 using BGGAPI.Raw;
+using BGGAPI.Raw.Collection;
+using BGGAPI.Raw.Things;
 
 namespace BGGAPI
 {

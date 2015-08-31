@@ -5,6 +5,8 @@ using System.Linq;
 using AutoMapper;
 using AutoMapper.Mappers;
 using BGGAPI.Raw;
+using BGGAPI.Raw.Collection;
+using BGGAPI.Raw.Things;
 using BGGAPI.SharedObjects;
 
 namespace BGGAPI
@@ -38,7 +40,7 @@ namespace BGGAPI
 
         private static void CreateCollectionMappings(ConfigurationStore configuration)
         {
-            configuration.CreateMap<CollectionItem, BGGCollection.Item>()
+            configuration.CreateMap<Raw.Collection.Item, BGGCollection.Item>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ObjectType))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ObjectId))
                 .ForMember(dest => dest.CollectionId, opt => opt.MapFrom(src => src.CollId))
@@ -88,7 +90,7 @@ namespace BGGAPI
             configuration.CreateMap<FloatValue, float>().NullSafeConvertUsing(src => src.value);
             configuration.CreateMap<StringValue, string>().NullSafeConvertUsing(src => src.value);
 
-            configuration.CreateMap<ThingsItem, BGGThings.Item>()
+            configuration.CreateMap<Raw.Things.Item, BGGThings.Item>()
                 .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average))
                 .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight))
                 .ForMember(dest => dest.BayesAverageRating,

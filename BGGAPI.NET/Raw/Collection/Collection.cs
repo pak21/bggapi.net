@@ -3,16 +3,16 @@
 using System;
 using System.Collections.Generic;
 
-namespace BGGAPI.Raw
+namespace BGGAPI.Raw.Collection
 {
     public class Collection
     {
         public int TotalItems { get; set; }
         public string TermsOfUse { get; set; }
-        public List<CollectionItem> Items { get; set; }
+        public List<Item> Items { get; set; }
     }
 
-    public class CollectionItem
+    public class Item
     {
         public int ObjectId { get; set; }
         public string ObjectType { get; set; }
