@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BGGAPI.Raw;
 using BGGAPI.Raw.Collection;
 using BGGAPI.Raw.Things;
 using RestSharp;
@@ -15,21 +14,7 @@ namespace BGGAPI
     /// </summary>
     public class BGGClient
     {
-        private static IRestResponse<T> CallBGG<T>(string resource, object request) where T : new()
-        {
-            var client = new RestClient {BaseUrl = Constants.DefaultApiAddress};
-
-            var restRequest = new RestRequest { Resource = resource };
-            foreach (var parameter in SerializeRequest(request))
-                restRequest.AddParameter(parameter.Key, parameter.Value);
-
-            var response = client.Execute<T>(restRequest);
-            if (response.ErrorException != null)
-            {
-                throw response.ErrorException;
-            }
-            return response;
-        }
+        #region Public methods
 
         /// <summary>
         /// Requests information about a user's collection
@@ -41,9 +26,7 @@ namespace BGGAPI
             if (string.IsNullOrEmpty(collectionRequest.Username))
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
-            var response = CallBGG<Collection>("collection", collectionRequest);
-            var collection = BGGFactory.CreateCollection(response.Data);
-            return new BGGResponse<BGGCollection>(response.StatusCode, collection);
+            return CallBGG<Collection, BGGCollection>("collection", collectionRequest, BGGFactory.CreateCollection);
         }
 
         /// <summary>
@@ -56,9 +39,31 @@ namespace BGGAPI
             if (thingsRequest.Id == null || !thingsRequest.Id.Any())
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
-            var response = CallBGG<Things>("thing", thingsRequest);
-            var things = BGGFactory.CreateThings(response.Data);
-            return new BGGResponse<BGGThings>(response.StatusCode, things);
+            return CallBGG<Things, BGGThings>("thing", thingsRequest, BGGFactory.CreateThings); 
+        }
+
+        #endregion
+
+
+        #region Private methods
+
+        private static BGGResponse<TProcessedType> CallBGG<TRawType, TProcessedType>(string resource, object request,
+            Func<TRawType, TProcessedType> createProcessedObject) where TRawType : new()
+        {
+            var client = new RestClient {BaseUrl = Constants.DefaultApiAddress};
+
+            var restRequest = new RestRequest {Resource = resource};
+            foreach (var parameter in SerializeRequest(request))
+                restRequest.AddParameter(parameter.Key, parameter.Value);
+
+            var response = client.Execute<TRawType>(restRequest);
+            if (response.ErrorException != null)
+            {
+                throw response.ErrorException;
+            }
+
+            var processedObject = createProcessedObject(response.Data);
+            return new BGGResponse<TProcessedType>(response.StatusCode, processedObject);
         }
 
         private const string ZeroString = "0";
@@ -106,5 +111,7 @@ namespace BGGAPI
 
             return parameters;
         }
+
+        #endregion
     }
 }
