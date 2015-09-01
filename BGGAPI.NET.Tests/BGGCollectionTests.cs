@@ -25,7 +25,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "7.77473"
             };
 
-            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
+            var ranking = new Ranking(rawRanking);
 
             Assert.AreEqual("family", ranking.Type);
             Assert.AreEqual(5497, ranking.IdWithinType);
@@ -48,7 +48,7 @@ namespace BGGAPI.NET.Tests
                 BayesAverage = "Not Ranked"
             };
 
-            var ranking = BGGAutomapper.Map<Ranking>(rawRanking);
+            var ranking = new Ranking(rawRanking);
 
             Assert.IsNull(ranking.Position);
             Assert.IsNull(ranking.BayesianAverageRating);
@@ -83,7 +83,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var item = BGGAutomapper.Map<BGGCollection.Item>(rawItem);
+            var item = new BGGCollection.Item(rawItem);
 
             Assert.AreEqual("thing", item.Type);
             Assert.AreEqual(1, item.Id);
@@ -129,7 +129,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var item = BGGAutomapper.Map<BGGCollection.Item>(rawItem);
+            var item = new BGGCollection.Item(rawItem);
 
             Assert.AreEqual(1, item.MinimumPlayers);
             Assert.AreEqual(2, item.MaximumPlayers);
@@ -159,7 +159,7 @@ namespace BGGAPI.NET.Tests
                 }
             };
 
-            var collection = BGGAutomapper.Map<BGGCollection>(rawCollection);
+            var collection = new BGGCollection(rawCollection);
 
             Assert.AreEqual("blah", collection.TermsOfUse);
             Assert.AreEqual(2, collection.Items.Count);

@@ -2,18 +2,73 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BGGAPI.SharedObjects;
 
 namespace BGGAPI
 {
     public class BGGCollection
     {
+        public BGGCollection(Raw.Collection.Collection rawCollection)
+        {
+            TermsOfUse = rawCollection.TermsOfUse;
+            Items = rawCollection.Items.Select(i => new Item(i)).ToList();
+        }
+
         // ReSharper disable UnusedAutoPropertyAccessor.Local - called via reflection
         public IList<Item> Items { get; private set; }
         public string TermsOfUse { get; private set; }
 
         public class Item
         {
+            public Item(Raw.Collection.Item rawItem)
+            {
+                CollectionId = rawItem.CollId;
+                Id = rawItem.ObjectId;
+                Image = new Uri("http:" + rawItem.Image);
+                Name = rawItem.Name;
+                NumberOfPlays = rawItem.NumPlays;
+                Subtype = rawItem.Subtype;
+                Thumbnail = new Uri("http:" + rawItem.Thumbnail);
+                Type = rawItem.ObjectType;
+                YearPublished = rawItem.YearPublished;
+
+                StatusLastModified = rawItem.Status.LastModified;
+                AvailableForTrade = rawItem.Status.ForTrade != 0;
+                OnWishlist = rawItem.Status.Wishlist != 0;
+                Owned = rawItem.Status.Own != 0;
+                Preordered = rawItem.Status.Preordered != 0;
+                PreviouslyOwned = rawItem.Status.PrevOwned != 0;
+                WantInTrade = rawItem.Status.Want != 0;
+                WantToBuy = rawItem.Status.WantToBuy != 0;
+                WantToPlay = rawItem.Status.WantToPlay != 0;
+
+                if (rawItem.Stats != null)
+                {
+                    MinimumPlayers = rawItem.Stats.MinPlayers;
+                    MaximumPlayers = rawItem.Stats.MaxPlayers;
+                    NumberOfOwners = rawItem.Stats.NumOwned;
+                    PlayingTime = TimeSpan.FromMinutes(rawItem.Stats.PlayingTime);
+
+                    if (rawItem.Stats.Rating != null)
+                    {
+                        AverageRating = rawItem.Stats.Rating.Average.value;
+                        BayesianAverageRating = rawItem.Stats.Rating.BayesAverage.value;
+                        Median = rawItem.Stats.Rating.Median.value;
+                        RatingStandardDeviation = rawItem.Stats.Rating.StdDev.value;
+                        UsersRatingThisItem = rawItem.Stats.Rating.UsersRated.value;
+
+                        Rankings = rawItem.Stats.Rating.Ranks.Select(r => new Ranking(r)).ToList();
+
+                        float ratingFromThisUser;
+                        if (float.TryParse(rawItem.Stats.Rating.value, out ratingFromThisUser))
+                        {
+                            RatingFromThisUser = ratingFromThisUser;
+                        }
+                    }
+                }
+            }
+
             public int Id { get; private set; }
             public string Type { get; private set; }
             public string Subtype { get; private set; }
