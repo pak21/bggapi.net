@@ -19,13 +19,17 @@ namespace BGGAPI
 
             CreateSharedMappings(configuration);
             CreateCollectionMappings(configuration);
-            CreateThingsMappings(configuration);
 
             Mapper = new MappingEngine(configuration);
         }
 
         private static void CreateSharedMappings(ConfigurationStore configuration)
         {
+            configuration.CreateMap<DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<IntValue, int>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<FloatValue, float>().NullSafeConvertUsing(src => src.value);
+            configuration.CreateMap<StringValue, string>().NullSafeConvertUsing(src => src.value);
+
             configuration.CreateMap<Rank, Ranking>()
                 .ForMember(dest => dest.IdWithinType, opt => opt.MapFrom(src => src.Id))
                 // The explicit casts are necessary here to convince the compiler that the lambda is
@@ -81,60 +85,6 @@ namespace BGGAPI
                 .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Stats.Rating.Ranks));
 
             configuration.CreateMap<Collection, BGGCollection>();
-        }
-
-        private static void CreateThingsMappings(ConfigurationStore configuration)
-        {
-            configuration.CreateMap<DateTimeValue, DateTime>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<IntValue, int>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<FloatValue, float>().NullSafeConvertUsing(src => src.value);
-            configuration.CreateMap<StringValue, string>().NullSafeConvertUsing(src => src.value);
-
-            configuration.CreateMap<Raw.Things.Item, BGGThings.Item>()
-                .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Statistics.Ratings.Average.value))
-                .ForMember(dest => dest.AverageWeight, opt => opt.MapFrom(src => src.Statistics.Ratings.AverageWeight.value))
-                .ForMember(dest => dest.BayesAverageRating,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.BayesAverage.value))
-                .ForMember(dest => dest.Categories,
-                    opt => opt.MapFrom(src => src.Links.Where(l => l.Type == "boardgamecategory")))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => new Uri("http:" + src.Image)))
-                .ForMember(dest => dest.MarketplaceListings, opt => opt.MapFrom(src => src.MarketplaceListings.Listings))
-                .ForMember(dest => dest.MaximumPlayers, opt => opt.MapFrom(src => src.MaxPlayers))
-                .ForMember(dest => dest.Median, opt => opt.MapFrom(src => src.Statistics.Ratings.Median.value))
-                .ForMember(dest => dest.MinimumAge, opt => opt.MapFrom(src => src.MinAge))
-                .ForMember(dest => dest.MinimumPlayers, opt => opt.MapFrom(src => src.MinPlayers))
-                .ForMember(dest => dest.NumberOfComments, opt => opt.MapFrom(src => src.Statistics.Ratings.NumComments.value))
-                .ForMember(dest => dest.NumberOfWeights, opt => opt.MapFrom(src => src.Statistics.Ratings.NumWeights.value))
-                .ForMember(dest => dest.PlayingTime,
-                    opt => opt.MapFrom(src => TimeSpan.FromMinutes(src.PlayingTime.value)))
-                .ForMember(dest => dest.Rankings, opt => opt.MapFrom(src => src.Statistics.Ratings.Ranks))
-                .ForMember(dest => dest.RatingStandardDeviation,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.StdDev.value))
-                .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => new Uri("http:" + src.Thumbnail)))
-                .ForMember(dest => dest.UserWhoAreOfferingThisForTrade,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Trading.value))
-                .ForMember(dest => dest.UsersWhoHaveRatedThis,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.UsersRated.value))
-                .ForMember(dest => dest.UsersWhoHaveThisOnTheirWishlist,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wishing.value))
-                .ForMember(dest => dest.UsersWhoOwnThis, opt => opt.MapFrom(src => src.Statistics.Ratings.Owned.value))
-                .ForMember(dest => dest.UserWhoWantThisInTrade,
-                    opt => opt.MapFrom(src => src.Statistics.Ratings.Wanting.value))
-                .ForMember(dest => dest.Videos, opt => opt.MapFrom(src => src.Videos.Videos));
-            configuration.CreateMap<Link, BGGThings.Link>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.value));
-            configuration.CreateMap<Name, BGGThings.Name>();
-            configuration.CreateMap<Poll, BGGThings.Poll>()
-                .ForMember(dest => dest.Votes, opt => opt.MapFrom(src => src.TotalVotes));
-            configuration.CreateMap<Video, BGGThings.Video>()
-                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link)));
-            configuration.CreateMap<Listing, BGGThings.MarketplaceListing>()
-                .ForMember(dest => dest.ListingDate, opt => opt.MapFrom(src => src.ListDate))
-                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
-                .ForMember(dest => dest.CurrencyValue, opt => opt.MapFrom(src => src.Price.value))
-                .ForMember(dest => dest.Link, opt => opt.MapFrom(src => new Uri(src.Link.HRef)))
-                .ForMember(dest => dest.LinkTitle, opt => opt.MapFrom(src => src.Link.Title));
-            configuration.CreateMap<Things, BGGThings>();
         }
 
         private static readonly MappingEngine Mapper;
