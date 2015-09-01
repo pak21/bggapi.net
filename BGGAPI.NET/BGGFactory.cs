@@ -13,12 +13,12 @@ namespace BGGAPI
     {
         public static BGGCollection CreateCollection(Collection rawCollection)
         {
-            return BGGAutomapper.Map<BGGCollection>(rawCollection);
+            return new BGGCollection(rawCollection);
         }
 
         public static BGGThings CreateThings(Things rawThings)
         {
-            return BGGAutomapper.Map<BGGThings>(rawThings);
+            return new BGGThings(rawThings);
         }
     }
 }
