@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BGGAPI.Raw.Collection;
 using BGGAPI.Raw.Things;
 using RestSharp;
@@ -23,10 +24,20 @@ namespace BGGAPI
         /// <returns>Details of the user's collection</returns>
         public BGGResponse<BGGCollection> GetCollection(BGGCollectionRequest collectionRequest)
         {
+            return GetCollectionAsync(collectionRequest).Result;
+        }
+
+        /// <summary>
+        /// Requests information about a user's collection in an asynchronous manner
+        /// </summary>
+        /// <param name="collectionRequest">Details of the request</param>
+        /// <returns>A task which returns details of the user's collection</returns>
+        public async Task<BGGResponse<BGGCollection>> GetCollectionAsync(BGGCollectionRequest collectionRequest)
+        {
             if (string.IsNullOrEmpty(collectionRequest.Username))
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
-            return CallBGG<Collection, BGGCollection>("collection", collectionRequest, BGGFactory.CreateCollection);
+            return await CallBGGAsync<Collection, BGGCollection>("collection", collectionRequest, BGGFactory.CreateCollection);
         }
 
         /// <summary>
@@ -36,10 +47,20 @@ namespace BGGAPI
         /// <returns>Details on the requested objects</returns>
         public BGGResponse<BGGThings> GetThings(BGGThingsRequest thingsRequest)
         {
+            return GetThingsAsync(thingsRequest).Result;
+        }
+
+        /// <summary>
+        /// Requests information about specific BGG objects in an asychronous manner
+        /// </summary>
+        /// <param name="thingsRequest">Details of the request</param>
+        /// <returns>A task which returns details on the requested objects</returns>
+        public async Task<BGGResponse<BGGThings>> GetThingsAsync(BGGThingsRequest thingsRequest)
+        {
             if (thingsRequest.Id == null || !thingsRequest.Id.Any())
                 throw new ArgumentException("Null or empty list of IDs in thingsRequest");
 
-            return CallBGG<Things, BGGThings>("thing", thingsRequest, BGGFactory.CreateThings); 
+            return await CallBGGAsync<Things, BGGThings>("thing", thingsRequest, BGGFactory.CreateThings);
         }
 
         #endregion
@@ -47,7 +68,8 @@ namespace BGGAPI
 
         #region Private methods
 
-        private static BGGResponse<TProcessedType> CallBGG<TRawType, TProcessedType>(string resource, object request,
+        private static async Task<BGGResponse<TProcessedType>> CallBGGAsync<TRawType, TProcessedType>(string resource,
+            object request,
             Func<TRawType, TProcessedType> createProcessedObject) where TRawType : new()
         {
             var client = new RestClient {BaseUrl = Constants.DefaultApiAddress};
@@ -56,7 +78,7 @@ namespace BGGAPI
             foreach (var parameter in SerializeRequest(request))
                 restRequest.AddParameter(parameter.Key, parameter.Value);
 
-            var response = client.Execute<TRawType>(restRequest);
+            var response = await client.ExecuteTaskAsync<TRawType>(restRequest);
             if (response.ErrorException != null)
             {
                 throw response.ErrorException;
