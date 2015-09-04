@@ -25,11 +25,17 @@ namespace BGGAPI
             {
                 CollectionId = rawItem.CollId;
                 Id = rawItem.ObjectId;
-                Image = new Uri("http:" + rawItem.Image);
+                if (rawItem.Image != null)
+                {
+                    Image = new Uri("http:" + rawItem.Image);
+                }
                 Name = rawItem.Name;
                 NumberOfPlays = rawItem.NumPlays;
                 Subtype = rawItem.Subtype;
-                Thumbnail = new Uri("http:" + rawItem.Thumbnail);
+                if (rawItem.Thumbnail != null)
+                {
+                    Thumbnail = new Uri("http:" + rawItem.Thumbnail);
+                }
                 Type = rawItem.ObjectType;
                 YearPublished = rawItem.YearPublished;
 
