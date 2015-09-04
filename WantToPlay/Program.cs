@@ -23,7 +23,8 @@ namespace WantToPlay
             "mike3838",
             "count_zero99uk",
             "ezekremiah",
-            "Quartez"
+            "Quartez",
+            "stinkatron5000"
         };
 
         private static readonly object LockObject = new object();
@@ -65,6 +66,7 @@ namespace WantToPlay
             {
                 if (retry)
                 {
+                    Console.WriteLine("Waiting to get collection for {0}", username);
                     Thread.Sleep(TimeSpan.FromSeconds(30));
                     await FetchUser(client, username, false);
                     return;
