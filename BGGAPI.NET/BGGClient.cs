@@ -18,16 +18,6 @@ namespace BGGAPI
         #region Public methods
 
         /// <summary>
-        /// Requests information about a user's collection
-        /// </summary>
-        /// <param name="collectionRequest">Details of the request</param>
-        /// <returns>Details of the user's collection</returns>
-        public BGGResponse<BGGCollection> GetCollection(BGGCollectionRequest collectionRequest)
-        {
-            return GetCollectionAsync(collectionRequest).Result;
-        }
-
-        /// <summary>
         /// Requests information about a user's collection in an asynchronous manner
         /// </summary>
         /// <param name="collectionRequest">Details of the request</param>
@@ -38,16 +28,6 @@ namespace BGGAPI
                 throw new ArgumentException("Null or empty username in collectionRequest");
 
             return await CallBGGAsync<Collection, BGGCollection>("collection", collectionRequest, BGGFactory.CreateCollection);
-        }
-
-        /// <summary>
-        /// Requests information about specific BGG objects
-        /// </summary>
-        /// <param name="thingsRequest">Details of the request</param>
-        /// <returns>Details on the requested objects</returns>
-        public BGGResponse<BGGThings> GetThings(BGGThingsRequest thingsRequest)
-        {
-            return GetThingsAsync(thingsRequest).Result;
         }
 
         /// <summary>
