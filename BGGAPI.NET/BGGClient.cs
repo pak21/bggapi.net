@@ -80,6 +80,7 @@ namespace BGGAPI
                     { typeof(bool?), o => ((bool?)o).Value ? OneString : ZeroString },
                     { typeof(DateTime), o => ((DateTime)o).ToString("yy-MM-dd HH:mm:ss") },
                     { typeof(List<int>), o => string.Join(",", (List<int>)o) },
+                    { typeof(BGGSubtype), o => o.ToString().ToLower() }
                 };
 
         // ReSharper disable once ReturnTypeCanBeEnumerable.Local - clearer as a Dictionary

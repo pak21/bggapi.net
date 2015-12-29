@@ -18,9 +18,15 @@ namespace BGGAPI
         // TODO: not implemented yet - need to deal with multiple different <item> tags
         //public bool Version { get; set; }
 
-        // TODO: work out serialization etc
-        // public List<SomeType> Subtype { get; set; }
-        // public List<SomeType> ExcludeSubtype { get; set; }
+        /// <summary>
+        /// If non-null, filter the collection to the specified subtype
+        /// </summary>
+        public BGGSubtype? Subtype { get; set; }
+
+        /// <summary>
+        /// If non-null, filter the collection to exclude the specified subtype
+        /// </summary>
+        public BGGSubtype? ExcludeSubtype { get; set; }
 
         /// <summary>
         /// If non-null, filter the collection to the specifically listed items
