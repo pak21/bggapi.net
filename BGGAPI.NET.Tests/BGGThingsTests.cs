@@ -292,6 +292,19 @@ namespace BGGAPI.NET.Tests
         }
 
         [Test]
+        public void TestNullImagesConversion()
+        {
+            var rawItem = NullItemFactory(123);
+            rawItem.Image = null;
+            rawItem.Thumbnail = null;
+
+            var item = new BGGThings.Item(rawItem);
+
+            Assert.IsNull(item.Image);
+            Assert.IsNull(item.Thumbnail);
+        }
+
+        [Test]
         public void TestThingsConversion()
         {
             var rawThings = new Things

@@ -26,12 +26,18 @@ namespace BGGAPI
                 Categories = rawItem.Links.Where(l => l.Type == "boardgamecategory").Select(l => new Link(l)).ToList();
                 Description = rawItem.Description;
                 Id = rawItem.Id;
-                Image = new Uri("http:" + rawItem.Image);
+                if (rawItem.Image != null)
+                {
+                    Image = new Uri("http:" + rawItem.Image);
+                }
                 Links = rawItem.Links.Select(l => new Link(l)).ToList();
                 MaximumPlayers = rawItem.MaxPlayers.value;
                 MinimumAge = rawItem.MinAge.value;
                 MinimumPlayers = rawItem.MinPlayers.value;
-                Thumbnail = new Uri("http:" + rawItem.Thumbnail);
+                if (rawItem.Thumbnail != null)
+                {
+                    Thumbnail = new Uri("http:" + rawItem.Thumbnail);
+                }
                 Type = rawItem.Type;
                 YearPublished = rawItem.YearPublished.value;
 
